@@ -1,6 +1,5 @@
 BACKUP
 node_modules/
-public/styles
 .env
 *.log
 *.sqlite3
