@@ -1,7 +1,8 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const helpers = require('../lib/helpers');
-// const dbFuncs = require('../db/queries/dbFuncs')
+const dbGet = require('../db/queries/db_get')
+const dbPut = require('../db/queries/db_put')
 
 
 const app = express();
@@ -21,7 +22,7 @@ module.exports = () => {
   app.get("/create_poll", (req, res) => {
     const templateVars = {
     };
-    helpers.happyRender(res, req, "create_poll", templateVars);
+    helpers.happyRender(res, req, "create_polls", templateVars);
   });
 
   /* gets all poll data from form, creates a new link, pushes poll to db, and redirects
@@ -33,16 +34,15 @@ module.exports = () => {
       creator_id: 1,
       title: req.body.poll_title,
       description: req.body.poll_descr,
-      adminLink: newLink + "/admin",
-      surveyLink: newLink,
-      timeCreated: Date.now(),
-      timeClosed: null, //time of vote completion(using as bool) //stretch
-      timeToDeath: null //countdown to poll //stretch
+      admin_link: newLink + "/admin",
+      survey_link: newLink,
+      time_created: new Date().toISOString(),
+      time_closed: null, //time of vote completion(using as bool) //stretch
+      time_to_death: null //countdown to poll //stretch
     }
 
-    // req.session.poll_id = dbFuncs.createPoll(newPoll)
+    req.session.poll_id = dbPut.put_new_poll(newPoll)
     /* set cookies */
-    req.session.pollID = 1;
     req.session.numPolls = req.body.poll_num_of_options;
     req.session.adminLink = newLink + "/admin";
     req.session.surveyLink = newLink;
@@ -69,7 +69,7 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
 
-    // insertPollOptions(pollOptions, req.session.poll_id);
+    dbPut.putAllPollChoices(pollOptions, req.session.poll_id);
 
     helpers.happyRedirect(res, req, "poll_created");
   });
@@ -88,7 +88,8 @@ module.exports = () => {
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
     // const pollID = dbFuncs.getPollId(adminLink);
-    // const pollOptions = dbFuncs.getPollOptions(id);
+    const pollID = 1;
+    const pollOptions = dbGet.getPollData(id);
     pollOptions = ["option1", "option2"]
     const templateVars = {
       options: pollOptions,
@@ -102,7 +103,8 @@ module.exports = () => {
   app.get("/poll/:id/", (req, res) => {
     const surveyLink = `http://localhost:8080/poll/${req.params.id}`;
     // const pollID = dbFuncs.getPollId(surveyLink);
-    // const pollOptions = dbFuncs.getPollOptions(id);
+    const pollID = 1;
+    const pollOptions = dbGet.getPollData(id);
     pollOptions = ["option1", "option2"]
     const templateVars = {
       options: pollOptions,
