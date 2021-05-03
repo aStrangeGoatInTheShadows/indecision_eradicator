@@ -166,3 +166,9 @@ putPollRatings(8, arr_of_ratings);
 //   "worse survey ever",
 // ];
 // putAllPollChoices(choice_names, 2);
+
+module.exports = {
+  putPollRatings,
+  putAllPollChoices,
+  put_new_poll
+};
