@@ -1,5 +1,5 @@
-// See: https://sass-lang.com/
-// Landing page transition inspired by Manuel Pinto : https://manuel.pinto.dev/
+/* // See: https://sass-lang.com/
+// Landing page transition inspired by Manuel Pinto : https://manuel.pinto.dev/ */
 body {
   font-family: 'Roboto';
   color: #fff;
@@ -53,6 +53,8 @@ div.landing-container {
 
 .button {
   font-weight: 600;
+  color: #ffffff;
+  padding: 8px 35px;
 
   background: #E26B6B;
   border-radius: 20px;
