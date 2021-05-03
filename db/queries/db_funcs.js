@@ -64,3 +64,7 @@ getPollRatings(pollID) // IMPLEMENTED //////////////////////////////////////////
    @return: true/false for inserted or not
 */
 insertPollRatings(pollRatings)
+
+
+/* getPollInfo */
+getPollId(adminLink)

@@ -170,5 +170,6 @@ putPollRatings(8, arr_of_ratings);
 module.exports = {
   putPollRatings,
   putAllPollChoices,
-  put_new_poll
+  put_new_poll,
+  // sendPollToDatabase
 };
