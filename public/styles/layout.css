@@ -1,3 +1,5 @@
+// See: https://sass-lang.com/
+// Landing page transition inspired by Manuel Pinto : https://manuel.pinto.dev/
 body {
   font-family: 'Roboto';
   color: #fff;
@@ -7,15 +9,15 @@ body {
 }
 
 @keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 body h1 {
@@ -43,6 +45,7 @@ div.landing-container {
   justify-content: center;
   margin-bottom: 40px;
   max-width: 15em;
+
   font-weight: bold;
   line-height: 40px;
   text-shadow: 4px 4px black;
@@ -50,6 +53,7 @@ div.landing-container {
 
 .button {
   font-weight: 600;
+
   background: #E26B6B;
   border-radius: 20px;
 }
