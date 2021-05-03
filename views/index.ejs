@@ -2,19 +2,38 @@
 <html lang="en">
   <head>
     <title>Home Page</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
 
   <body>
-    <h1>Landing page</h1>
-    <button onclick="window.location = '/create_poll'">
-      submit
-    </button>
+    <div class="landing-container">
+      <div id="landing-title"><h1>poll...er</h1></div>
+      <p class="landing-description">Tired of indecision? GET SOME THUNDER IN YOUR STEP!
+
+        poller helps users collaborate on difficult decisions.
+
+        </p>
+      <button class="button" onclick="window.location = '/create_poll'">
+        CREATE A POLL
+      </button>
+      <img src="../docs/unicorn.png" width="300" height="200">
+      <span class="small-text">
+        2021 Unicorn Thunder LLC
+    </div>
   </body>
 </html>
