@@ -9,7 +9,7 @@ app.use(cookieSession({
   name: 'session', keys: ["secret", "keys"], maxAge: (24 * 60 * 60 * 1000) //max age 24hrs
 }));
 
-module.exports = (db) => {
+module.exports = () => {
   app.get("/index", (req, res) => {
     res.redirect("/");
   });
