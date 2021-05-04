@@ -105,7 +105,7 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    const adminLink = `http://localhost:8080/poll/${req.params.id}`;
     dbGet.getPollIdByAdminLink(adminLink).then(
       linkRes => {
         req.session.pollID = linkRes.id
