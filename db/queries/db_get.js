@@ -77,7 +77,7 @@ const getPollRatings = function(poll_id) {
   console.log(queryString);
 
   return db_client.query(queryString, [poll_id])
-    .then((res) => res.rows)
+    .then((res) => {return res.rows})
     .catch((err) => { console.log("getPollRatings ", err) });
 };
 
