@@ -105,13 +105,12 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}`;
-    dbGet.getPollIdByAdminLink(adminLink).then(
-      linkRes => {
-        req.session.pollID = linkRes.id
-        req.session.pollID = 43;
-        helpers.happyRender(res, req, "user_landing", { userid: req.params.id });
-      }
+    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    dbGet.getPollIdByAdminLink(adminLink).then(linkRes => {
+      req.session.pollID = linkRes.id;
+      const templateVars = { userid: req.params.id };
+      helpers.happyRender(res, req, "user_landing", templateVars);
+    }
     );
   });
 
