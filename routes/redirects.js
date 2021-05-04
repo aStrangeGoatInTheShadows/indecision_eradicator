@@ -56,7 +56,6 @@ module.exports = () => {
     if (!req.session.numPolls) {
       req.session.numPolls = 2;
     }
-    console.log("pollID: ", req.session.pollID)
     const templateVars = {
       numPolls: req.session.numPolls,
       options: [req.session.numPolls],
@@ -70,7 +69,6 @@ module.exports = () => {
     for (const item in req.body) {
       pollOptions.push(req.body[item]);
     }
-    console.log(req.session.pollID)
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
 
     helpers.happyRedirect(res, req, "poll_created");
@@ -86,36 +84,66 @@ module.exports = () => {
     helpers.happyRender(res, req, "poll_created", templateVars);
   });
 
-  /* Allows user to edit options should discuss whether we want this later.*/
+  /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
     // const pollID = dbFuncs.getPollId(adminLink);
-    const pollID = 1;
-    const pollOptions = dbGet.getPollData(id);
-    pollOptions = ["option1", "option2"]
-    const templateVars = {
-      options: pollOptions,
-      numPolls: pollOptions.length
-    };
+    const pollID = 43;
 
-    helpers.happyRender(res, req, "create_poll_options", templateVars);
+    dbGet.getPollRatings(pollID).then(result => {
+      const optionsArr = []
+      for (const option of result) {
+        optionsArr.push(option.name);
+      }
+      const templateVars = {
+        options: optionsArr,
+        numPolls: optionsArr.length
+      };
+      helpers.happyRender(res, req, "admin_view", templateVars);
+    });
   });
 
-  /* Allows user to edit options should discuss whether we want this later.*/
   app.get("/poll/:id/", (req, res) => {
-    const surveyLink = `http://localhost:8080/poll/${req.params.id}`;
-    // const pollID = dbFuncs.getPollId(surveyLink);
-    const pollID = 1;
-    const pollOptions = dbGet.getPollData(id);
-    pollOptions = ["option1", "option2"]
-    const templateVars = {
-      options: pollOptions,
-      numPolls: pollOptions.length
-    };
-
-    helpers.happyRender(res, req, "create_poll_options", templateVars);
+    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    // req.session.pollID = dbFuncs.getPollId(adminLink);
+    req.session.pollID = 43;
+    helpers.happyRender(res, req, "user_landing", { userid: req.params.id });
   });
 
+  app.post("/poll/:id/", (req, res) => {
+    helpers.happyRedirect(res, req, `/poll/${req.params.id}/uservoting/`);
+  });
+
+  app.get("/poll/:id/uservoting/", (req, res) => {
+    dbGet.getPollChoices(req.session.pollID).then(result => {
+      const optionsArr = []
+      for (const option of result) {
+        optionsArr.push(option.name);
+      }
+      const templateVars = {
+        options: optionsArr,
+        numPolls: optionsArr.length
+      };
+      helpers.happyRender(res, req, "user_voting", templateVars);
+    });
+  });
+
+  app.post("/poll/:id/uservoting/", (req, res) => {
+    const poll_ratings = [];
+
+    /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
+    for (const key in req.body) {
+      poll_ratings.push(req.body[key])
+    }
+    
+    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    helpers.happyRedirect(res, req, `/vote_submitted/`);
+  });
+
+  app.get("/vote_submitted/", (req, res) => {
+    helpers.happyRender(res, req, "vote_submitted", {});
+  });
+  
   return app;
 };
 
