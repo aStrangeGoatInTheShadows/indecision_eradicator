@@ -4,12 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <title>User Landing</title>
   </head>
   <body>
-    <!-- could honestly just use a:href here to link to user_voting -->
+    
+  </body>
+  <body>
+    <div class="landing-container">
+      <div id="landing-title"><h1>poll...er</h1></div>
+      <p class="landing-description">
+        <!-- <%= poll_title HERE %> -->
+      </p>
+      <!-- could honestly just use a:href here to link to user_voting -->
     <form action="./" method="post">
-      <button type="submit">submit</button>
+      <button type="submit">Vote</button>
     </form>
+      <div><img id="unicorn" src="/imgs/unicorn.png" width="300" height="200" alt="unicorn"></div>
+      <span class="small-text">
+        2021 Unicorn Thunder LLC
+    </div>
   </body>
 </html>

@@ -4,9 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/create_poll_options.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <title>User Voting</title>
   </head>
   <body>
+    <span><h1 id="title">USER VOTING</h1></span>
     <form action="./" method="post">
       <% for(let i = 0; i < numPolls; i++){ %>
       <input name="label_<%= i %>" value="<%= options[i]%>" readonly />
@@ -14,4 +23,5 @@
       <button type="submit">submit</button>
     </form>
   </body>
+  
 </html>
