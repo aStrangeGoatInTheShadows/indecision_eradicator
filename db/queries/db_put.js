@@ -111,30 +111,30 @@ const putPollRatings = function (poll_id, poll_ratings) {
 
   // Gets the current values from the polls
   getPollRatings(poll_id)
-    .then((table_data) => {
-      current_ratings = table_data;
-    })
-    .then(() => {
-      let index = 0;
+    // .then((table_data) => {
+    //   current_ratings = table_data;
+    // })
+    // .then(() => {
+    //   let index = 0;
       
-      for (let row of current_ratings) {
-        const queryString = `
-          UPDATE poll_choices
-          SET rating = rating + ${poll_ratings[index]}
-          WHERE id = $1
-        `;
-        index++;
+    //   for (let row of current_ratings) {
+    //     const queryString = `
+    //       UPDATE poll_choices
+    //       SET rating = rating + ${poll_ratings[index]}
+    //       WHERE id = $1
+    //     `;
+    //     index++;
        
-        db_client.query(queryString, [row.id])
-      }
-    })
-    .catch((err) => {
-      console.log("not quite right", err);
-      return false;
-    })
-    .then (()=>{
-      return true;
-    })
+    //     db_client.query(queryString, [row.id])
+    //   }
+    // })
+    // .catch((err) => {
+    //   console.log("not quite right", err);
+    //   return false;
+    // })
+    // .then (()=>{
+    //   return true;
+    // })
 };
 
 /**takes a pollID and returns array of pollOptions and ratings

@@ -87,7 +87,7 @@ module.exports = () => {
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    // const pollID = dbFuncs.getPollId(adminLink);
+    // const pollID = dbFuncs.getPollIdByAdminLink(adminLink).then(console.log(res));
     const pollID = 43;
 
     dbGet.getPollRatings(pollID).then(result => {
@@ -135,7 +135,7 @@ module.exports = () => {
     for (const key in req.body) {
       poll_ratings.push(req.body[key])
     }
-    
+
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
@@ -143,7 +143,7 @@ module.exports = () => {
   app.get("/vote_submitted/", (req, res) => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
-  
+
   return app;
 };
 
