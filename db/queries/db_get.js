@@ -81,6 +81,19 @@ const getPollRatings = function (poll_id) {
     .catch((err)=>{console.log("getPollRatings ", err)});
 };
 
+/** given the admin Link return the pollID 
+   @params adminLink: http://localhost:8080/poll/43S25H/admin
+   @return: the admin's id AS AN OBJECT IN AN ARRAY
+*/
+const getPollIdByAdminLink = function (adminLink) {
+  return db_client.query (`
+    SELECT id
+    FROM polls
+    WHERE admin_link LIKE $1
+  `,[adminLink])
+    .then((res)=>{console.log(res.rows)})
+}
+
 // const makeGetQuery = function (selection, table, where) {
 //   let queryString = `SELECT ${selection}
 //   FROM ${table}
@@ -102,5 +115,6 @@ module.exports = {
   getCurrLinks,
   getPollData,
   getPollChoices,
-  getPollRatings
+  getPollRatings,
+  getPollIdByAdminLink
 };
