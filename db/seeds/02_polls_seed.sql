@@ -38,4 +38,9 @@ VALUES
 (6, 'sarah'); 
 
 INSERT INTO poll_unique_visits (poll_id, cookie_id, phone_number)
-VALUES(4, 'sdfsdfsdf', '778-245-6689')
+VALUES
+(4, 'sdfsdfsdf', '778-245-6689'),
+(4, 'dfghdsfgdsg', '778-245-2343'),
+(4, 'sdffsdgdfg', '778-324-7673'),
+(4, 'sdfcvbcvbs', '778-888-1234'),
+(4, 'sd234234234', '778-222-5431')

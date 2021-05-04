@@ -139,7 +139,6 @@ module.exports = () => {
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
-
   app.get("/vote_submitted/", (req, res) => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
