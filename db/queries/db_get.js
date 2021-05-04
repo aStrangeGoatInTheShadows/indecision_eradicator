@@ -72,7 +72,7 @@ const getPollChoices = function (poll_id) {
    @return: [{option1:10},{option2:20},{option3:145}]
 */
 const getPollRatings = function (poll_id) {
-  const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1");
+  const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
 
   console.log(queryString);
 
