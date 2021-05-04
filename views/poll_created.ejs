@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Document</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/poll_created.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+    <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
-  <body>
-    <h1>Poll Created</h1>
-    <div>Admin Link: <%= adminLink%></div>
-    <div>Voting Link: <%= surveyLink%></div>
+
+  <body class="links-page-container">
+    <h1 id="title">Poll Has Been Created!</h1>
+      <div>An email will be sent to you with the links below</div>
+  
+      <div>Admin Link: <p class="link"><%= adminLink%></p></div>
+      <div>Voting Link: <p class="link"><%= surveyLink%></p></div>
+
+      <button class="button" onclick="window.location = '/create_poll'">
+        CREATE ANOTHER POLL
+      </button>
   </body>
 </html>
