@@ -72,13 +72,13 @@ const getPollChoices = function (poll_id) {
    @return: [{option1:10},{option2:20},{option3:145}]
 */
 const getPollRatings = function (poll_id) {
-  const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
+  // // const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
 
-  console.log(queryString);
+  // console.log(queryString);
 
-  return db_client.query(queryString, [poll_id])
-    .then((res) => res.rows)
-    .catch((err)=>{console.log("getPollRatings ", err)});
+  // return db_client.query(queryString, [poll_id])
+  //   .then((res) => res.rows)
+  //   .catch((err)=>{console.log("getPollRatings ", err)});
 };
 
 /** given the admin Link return the pollID 
