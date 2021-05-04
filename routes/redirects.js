@@ -128,17 +128,17 @@ module.exports = () => {
     });
   });
 
-  app.post("/poll/:id/uservoting/", (req, res) => {
-    const poll_ratings = [];
+  // app.post("/poll/:id/uservoting/", (req, res) => {
+  //   const poll_ratings = [];
 
-    /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
-    for (const key in req.body) {
-      poll_ratings.push(req.body[key])
-    }
+  //   /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
+  //   for (const key in req.body) {
+  //     poll_ratings.push(req.body[key])
+  //   }
     
-    dbPut.putPollRatings(req.session.pollID, poll_ratings);
-    helpers.happyRedirect(res, req, `/vote_submitted/`);
-  });
+  //   dbPut.putPollRatings(req.session.pollID, poll_ratings);
+  //   helpers.happyRedirect(res, req, `/vote_submitted/`);
+  // });
 
   app.get("/vote_submitted/", (req, res) => {
     helpers.happyRender(res, req, "vote_submitted", {});

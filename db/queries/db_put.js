@@ -109,7 +109,7 @@ const putAllPollChoices = function (choice_names, poll_id) {
 const putPollRatings = function (poll_id, poll_ratings) {
   let current_ratings = [];
 
-  // Gets the current values from the polls
+  // Gets the current values from the polls  
   getPollRatings(poll_id)
     .then((table_data) => {
       current_ratings = table_data;
@@ -151,10 +151,10 @@ const sumOurRatings = function (current_ratings, new_ratings) {
   return arr_of_ratings;
 };
 
-// do poll ratings for our dumb fat ex
-const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
+// // do poll ratings for our dumb fat ex
+// const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
 
-putPollRatings(8, arr_of_ratings);
+// putPollRatings(8, arr_of_ratings);
 
 // choice_names = [
 //   "feet",
