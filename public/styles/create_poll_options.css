@@ -77,3 +77,18 @@ input {
   height: 40px;
   margin: 10px 0; 
 }
+
+
+div.each-option {
+  text-align: center;
+  font-weight: 600;
+  padding-top: 10px;
+  color: #fff;
+
+  background: #E48181;
+  border-radius: 5px;
+
+  width: 350px;
+  height: 40px;
+  margin: 10px 0; 
+}
