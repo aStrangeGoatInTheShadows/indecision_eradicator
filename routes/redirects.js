@@ -87,27 +87,32 @@ module.exports = () => {
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    // const pollID = dbFuncs.getPollIdByAdminLink(adminLink).then(console.log(res));
-    const pollID = 43;
-
-    dbGet.getPollRatings(pollID).then(result => {
-      const optionsArr = []
-      for (const option of result) {
-        optionsArr.push(option.name);
-      }
-      const templateVars = {
-        options: optionsArr,
-        numPolls: optionsArr.length
-      };
-      helpers.happyRender(res, req, "admin_view", templateVars);
+    dbGet.getPollIdByAdminLink(adminLink).then(linkRes => {
+      const pollID = linkRes.id;
+      dbGet.getPollRatings(pollID).then(result => {
+        console.log(result)
+        const optionsArr = []
+        for (const option of result) {
+          optionsArr.push(option.name);
+        }
+        const templateVars = {
+          options: optionsArr,
+          numPolls: optionsArr.length
+        };
+        helpers.happyRender(res, req, "admin_view", templateVars);
+      });
     });
   });
 
   app.get("/poll/:id/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    // req.session.pollID = dbFuncs.getPollId(adminLink);
-    req.session.pollID = 43;
-    helpers.happyRender(res, req, "user_landing", { userid: req.params.id });
+    dbGet.getPollIdByAdminLink(adminLink).then(
+      linkRes => {
+        req.session.pollID = linkRes.id
+        req.session.pollID = 43;
+        helpers.happyRender(res, req, "user_landing", { userid: req.params.id });
+      }
+    );
   });
 
   app.post("/poll/:id/", (req, res) => {

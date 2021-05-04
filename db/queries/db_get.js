@@ -2,7 +2,7 @@ const { db_client, makeGetQuery } = require("../db.js");
 const input = process.argv[2];
 
 // fetches id, title and creation time from a table
-const getAllDebug = function (table) {
+const getAllDebug = function(table) {
   console.log("fetching all from table :", table);
 
   const queryString = makeGetQuery("id, title, time_created", table);
@@ -21,7 +21,7 @@ const getAllDebug = function (table) {
    @params: none
    @return: [{survey,admin},{survey,admin},{survey,admin},{survey,admin}]
 */
-const getCurrLinks = function () {
+const getCurrLinks = function() {
   const db_query = makeGetQuery("survey_link, admin_link", "polls");
   // console.log(db_query);
 
@@ -43,7 +43,7 @@ const getCurrLinks = function () {
                time_to_death
             };
 */
-const getPollData = function (poll_id) {
+const getPollData = function(poll_id) {
   const queryString = makeGetQuery(
     `creator_id, title, description, admin_link, survey_link, time_created, time_closed, time_to_death`,
     "polls",
@@ -57,7 +57,7 @@ const getPollData = function (poll_id) {
    @params: pollID: 1
    @return: ["option1","option2","option3"]
 */
-const getPollChoices = function (poll_id) {
+const getPollChoices = function(poll_id) {
   const queryString = makeGetQuery(
     `poll_id, name, rating`,
     "poll_choices",
@@ -71,31 +71,31 @@ const getPollChoices = function (poll_id) {
    @params: pollID: 1
    @return: [{option1:10},{option2:20},{option3:145}]
 */
-const getPollRatings = function (poll_id) {
-  // // const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
+const getPollRatings = function(poll_id) {
+  const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
 
-  // console.log(queryString);
+  console.log(queryString);
 
-  // return db_client.query(queryString, [poll_id])
-  //   .then((res) => res.rows)
-  //   .catch((err)=>{console.log("getPollRatings ", err)});
+  return db_client.query(queryString, [poll_id])
+    .then((res) => res.rows)
+    .catch((err) => { console.log("getPollRatings ", err) });
 };
 
 /** given the admin Link return the pollID 
    @params adminLink: http://localhost:8080/poll/43S25H/admin
    @return: the admin's id AS AN OBJECT IN AN ARRAY
 */
-const getPollIdByAdminLink = function (adminLink) {
-  return db_client.query (`
+const getPollIdByAdminLink = function(adminLink) {
+  return db_client.query(`
     SELECT id
     FROM polls
     WHERE admin_link LIKE $1
-  `,[adminLink])
-    .then((res)=>{console.log(res.rows)})
+  `, [adminLink])
+    .then((res) => { return (res.rows[0]) })
 }
 
-const getAllPhoneNumbersForPoll = function (poll_id) {
-  return db_client.query (`
+const getAllPhoneNumbersForPoll = function(poll_id) {
+  return db_client.query(`
     SELECT phone_number
     FROM poll_unique_visits
     WHERE poll_id = $1  
