@@ -1,0 +1,28 @@
+body.links-page-container {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;  
+  margin-top: 250px;
+
+  background: #E26B6B;
+  font-family: 'Roboto';
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+}
+
+.link {
+  font-weight:lighter;
+  color: blue;
+}
+
+.button {
+  font-weight: 600;
+  color: #ffffff;
+  padding: 8px 35px;
+  margin-top: 50px;
+
+  background: #E26B6B;
+  border-radius: 20px;
+}
