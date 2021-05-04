@@ -69,6 +69,7 @@ button {
 input {
   text-align: center;
   font-weight: 600;
+  color: #fff;
 
   background: #E48181;
   border-radius: 5px;
@@ -78,17 +79,18 @@ input {
   margin: 10px 0; 
 }
 
+.fa-bars {
+  color: #000000;
+  position: relative;
+  left: 150px;
+  bottom: 40px;
+  z-index: 1;
+}
 
-div.each-option {
-  text-align: center;
-  font-weight: 600;
-  padding-top: 10px;
-  color: #fff;
-
-  background: #E48181;
-  border-radius: 5px;
-
-  width: 350px;
-  height: 40px;
-  margin: 10px 0; 
+.fa-chevron-circle-left {
+  color:#fff;
+  position: absolute;
+  z-index:9;
+  top: 33px;
+  left: 10px;
 }
