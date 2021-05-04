@@ -41,13 +41,14 @@ module.exports = () => {
       time_to_death: null //countdown to poll //stretch
     }
 
-    req.session.poll_id = dbPut.put_new_poll(newPoll)
-    /* set cookies */
-    req.session.numPolls = req.body.poll_num_of_options;
-    req.session.adminLink = newLink + "/admin";
-    req.session.surveyLink = newLink;
+    dbPut.put_new_poll(newPoll).then(result => {
+      req.session.pollID = result;
+      req.session.numPolls = req.body.poll_num_of_options;
+      req.session.adminLink = newLink + "/admin";
+      req.session.surveyLink = newLink;
 
-    helpers.happyRedirect(res, req, "create_poll_options");
+      helpers.happyRedirect(res, req, "create_poll_options");
+    });
   });
 
   /* gets page to input poll options */
@@ -55,6 +56,7 @@ module.exports = () => {
     if (!req.session.numPolls) {
       req.session.numPolls = 2;
     }
+    console.log("pollID: ", req.session.pollID)
     const templateVars = {
       numPolls: req.session.numPolls,
       options: [req.session.numPolls],
@@ -68,8 +70,8 @@ module.exports = () => {
     for (const item in req.body) {
       pollOptions.push(req.body[item]);
     }
-
-    dbPut.putAllPollChoices(pollOptions, req.session.poll_id);
+    console.log(req.session.pollID)
+    dbPut.putAllPollChoices(pollOptions, req.session.pollID);
 
     helpers.happyRedirect(res, req, "poll_created");
   });
