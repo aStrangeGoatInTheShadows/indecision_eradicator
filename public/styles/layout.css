@@ -20,6 +20,10 @@ body {
 	}
 }
 
+#unicorn {
+  margin-top: 50px;
+}
+
 body h1 {
   font-size: 80px;
   color: #ffffff;
@@ -33,7 +37,6 @@ div.landing-container {
   justify-content: center;
   align-items: center;
   margin-top: 5em;
-  border: 3px solid black;
 }
 
 .landing-title {

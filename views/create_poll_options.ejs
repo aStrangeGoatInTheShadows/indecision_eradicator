@@ -20,7 +20,7 @@
       <span class="small-instructions">click on the boxes to enter text</span>
       <div class="options">
         <form action="/create_poll_options" method="post">
-          <% for(let i = 1; i<= 5; i++ ){ %>
+          <% for(let i = 1; i<= numPolls; i++ ){ %>
           <div class="row">
             <!-- <label for="option <%= i %>:">option <%= i %>:</label> -->
             <input type="text" name="option<%= i %>" placeholder="Click to input Option" />
