@@ -18,10 +18,12 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
+    "mailgun-js": "^0.22.0",
     "morgan": "^1.9.1",
     "pg": "^8.5.0",
     "pg-native": "^3.0.0",
-    "readable-stream": "^2.3.6"
+    "readable-stream": "^2.3.6",
+    "twilio": "^3.61.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
