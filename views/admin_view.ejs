@@ -4,12 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/create_poll_options.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+    <title>Admin-Results</title>
   </head>
+  
   <body>
-    <h1>Current rankings</h1>
-    <% for(let i = 0; i < numPolls; i++){ %>
-    <div><%= options[i] %></div>
-    <% } %>
+    <span><h1 id="title">CURRENT RANKINGS</h1></span>
+
+    <div class="container">
+      <span class="instructions">Here are the results of your poll!</span>
+      <span class="small-instructions">Ordered from most to least preferred (top to bottom)</span>
+      <div class="options">
+        <% for(let i = 0; i < numPolls; i++){ %>
+          <div><%= options[i] %></div>
+          <% } %>
+      </div>
+    </div>
   </body>
 </html>
