@@ -66,5 +66,8 @@ getPollRatings(pollID) // IMPLEMENTED //////////////////////////////////////////
 insertPollRatings(pollRatings)
 
 
-/* getPollInfo */
+/** given the admin Link return the pollID 
+   @params adminLink: http://localhost:8080/poll/43S25H/admin
+   @return: the admin's id
+*/
 getPollId(adminLink)
