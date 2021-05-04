@@ -16,7 +16,7 @@ body {
   top: 0px;
   margin: 0;
   background: #E26B6B;
-  width: -webkit-fill-available;
+  width: 100%;
   height: 80px;
 
   font-size: 40px;
@@ -69,6 +69,21 @@ form {
 input {
   text-align: center;
   font-weight: 600;
+
+  background: #E48181;
+  border-radius: 5px;
+
+  width: 350px;
+  height: 40px;
+  margin: 10px 0; 
+}
+
+
+div.each-option {
+  text-align: center;
+  font-weight: 600;
+  padding-top: 10px;
+  color: #fff;
 
   background: #E48181;
   border-radius: 5px;

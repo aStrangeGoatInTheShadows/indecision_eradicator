@@ -19,7 +19,7 @@
     <h1 id="title">Poll Has Been Created!</h1>
       <div>An email will be sent to you with the links below</div>
   
-      <div>Admin Link: <p class="link"><%= adminLink%></p></div>
+      <div>Admin Link: <a class="link" href="<%= adminLink%>"><%= adminLink%></a>
       <div>Voting Link: <p class="link"><%= surveyLink%></p></div>
 
       <button class="button" onclick="window.location = '/create_poll'">
