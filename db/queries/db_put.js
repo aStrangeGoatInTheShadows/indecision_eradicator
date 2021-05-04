@@ -17,7 +17,7 @@ const some_poll = {
  * @param {} poll An object containing everything to setup a poll
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-const sendPollToDatabase = function (poll) {
+const sendPollToDatabase = function(poll) {
   console.log("creating a new poll");
 
   const queryParams = [];
@@ -55,7 +55,7 @@ const sendPollToDatabase = function (poll) {
  * @param {} some_poll An object containing everything to setup a poll
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-const put_new_poll = function (some_poll) {
+const put_new_poll = function(some_poll) {
   return sendPollToDatabase(some_poll)
     .then((res) => {
       console.log("added new poll to db with id:", res.rows[0].id);
@@ -75,7 +75,7 @@ const put_new_poll = function (some_poll) {
    pollID: 1
    @return: none
 */
-const putAllPollChoices = function (choice_names, poll_id) {
+const putAllPollChoices = function(choice_names, poll_id) {
   let queryParams = [];
   for (let name of choice_names) {
     const param = [poll_id, name];
@@ -106,35 +106,35 @@ const putAllPollChoices = function (choice_names, poll_id) {
    @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1
    @return: true/false for inserted or not
 */
-const putPollRatings = function (poll_id, poll_ratings) {
+const putPollRatings = function(poll_id, poll_ratings) {
   let current_ratings = [];
 
   // Gets the current values from the polls  
   getPollRatings(poll_id)
-    // .then((table_data) => {
-    //   current_ratings = table_data;
-    // })
-    // .then(() => {
-    //   let index = 0;
+    .then((table_data) => {
+      current_ratings = table_data;
+    })
+    .then(() => {
+      let index = 0;
       
-    //   for (let row of current_ratings) {
-    //     const queryString = `
-    //       UPDATE poll_choices
-    //       SET rating = rating + ${poll_ratings[index]}
-    //       WHERE id = $1
-    //     `;
-    //     index++;
-       
-    //     db_client.query(queryString, [row.id])
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log("not quite right", err);
-    //   return false;
-    // })
-    // .then (()=>{
-    //   return true;
-    // })
+      for (let row of current_ratings) {
+        const queryString = `
+          UPDATE poll_choices
+          SET rating = rating + ${poll_ratings[index][row.name]}
+          WHERE id = $1
+        `;
+
+        index++;
+        db_client.query(queryString, [row.id])
+      }
+    })
+    .catch((err) => {
+      console.log("not quite right", err);
+      return false;
+    })
+    .then(() => {
+      return true;
+    })
 };
 
 /**takes a pollID and returns array of pollOptions and ratings
@@ -142,7 +142,7 @@ const putPollRatings = function (poll_id, poll_ratings) {
    @param : new_ratings : [3,5,8...] whats passed in for user votes
    @return: true/false for inserted or not
 */
-const sumOurRatings = function (current_ratings, new_ratings) {
+const sumOurRatings = function(current_ratings, new_ratings) {
   const arr_of_ratings = [];
   for (let index in current_ratings) {
     arr_of_ratings.push(current_ratings[index].rating + new_ratings[index]);
