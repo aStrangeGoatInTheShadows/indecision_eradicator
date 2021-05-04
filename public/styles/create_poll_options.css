@@ -1,0 +1,79 @@
+/* // See: https://sass-lang.com/
+// Landing page transition inspired by Manuel Pinto : https://manuel.pinto.dev/ */
+body {
+  font-family: 'Roboto';
+  background: #fff;
+  /* background: linear-gradient(-45deg, #b97171, #E26B6B, #0f779c, #23d5ab);
+  background-size: 100% 400%; */
+}
+
+#title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0px;
+  margin: 0;
+  background: #E26B6B;
+  width: -webkit-fill-available;
+  height: 80px;
+
+  font-size: 40px;
+  color: #ffffff;
+  letter-spacing: 3px;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7em;
+}
+
+.instructions {
+  margin: 0 0 40px;
+  
+  font-weight: bold;
+  color: black;
+}
+
+.small-instructions {
+  margin: 0 0 20px;
+  
+  font-weight: lighter;
+  font-size: 12px;
+  color: #6d6d6d;
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  font-weight: 600;
+  font-size: 24px;
+  color: #ffffff;
+  padding: 8px 35px;
+
+  margin: 30px 0px; 
+  background: #E26B6B;
+  border-radius: 20px;
+}
+
+input {
+  text-align: center;
+  font-weight: 600;
+
+  background: #E48181;
+  border-radius: 5px;
+
+  width: 350px;
+  height: 40px;
+  margin: 10px 0; 
+}
