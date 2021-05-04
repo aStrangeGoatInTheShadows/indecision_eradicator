@@ -94,6 +94,17 @@ const getPollIdByAdminLink = function (adminLink) {
     .then((res)=>{console.log(res.rows)})
 }
 
+const getAllPhoneNumbersForPoll = function (poll_id) {
+  return db_client.query (`
+    SELECT phone_number
+    FROM poll_unique_visits
+    WHERE poll_id = $1  
+  `, [poll_id])
+    .then(res => res.rows);
+}
+
+// getAllPhoneNumbersForPoll(4)
+
 // const makeGetQuery = function (selection, table, where) {
 //   let queryString = `SELECT ${selection}
 //   FROM ${table}
@@ -116,5 +127,6 @@ module.exports = {
   getPollData,
   getPollChoices,
   getPollRatings,
-  getPollIdByAdminLink
+  getPollIdByAdminLink,
+  getAllPhoneNumbersForPoll
 };
