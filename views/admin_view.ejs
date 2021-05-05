@@ -18,10 +18,11 @@
 
     <div class="container">
       <span class="instructions">Here are the results of your poll!</span>
-      <span class="small-instructions">Ordered from most to least preferred (top to bottom)</span>
+      <span class="instructions">Ordered from most to least preferred (top to bottom)</span>
       <div class="options">
         <% for(let i = 0; i < numPolls; i++){ %>
-          <div class="each-option"><%= options[i] %></div>
+          
+          <div class="each-option"><%= i + 1 %>: <%= options[i] %></div>
           <% } %>
       </div>
     </div>
