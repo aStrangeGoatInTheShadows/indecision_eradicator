@@ -140,10 +140,9 @@ module.exports = () => {
     let ranking = Object.keys(req.body).length;
     for (const key in req.body) {
       const option = req.body[key];
-      poll_ratings.push({ [option]: ranking })
+      poll_ratings.push({ "name": option, "rank": ranking })
       ranking--;
     }
-    console.log(poll_ratings)
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
