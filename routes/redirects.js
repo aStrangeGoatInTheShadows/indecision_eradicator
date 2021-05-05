@@ -11,11 +11,14 @@ app.use(cookieSession({
 }));
 
 module.exports = () => {
+  app.get("/", (req, res) => {
+    helpers.happyRender(res, req, "index", {});
+  });
   app.get("/index", (req, res) => {
     res.redirect("/");
   });
   app.get("/home", (req, res) => {
-    helpers.happyRedirect(res, req, "/");
+    res.redirect("/")
   });
 
   /*gets from to create a poll  */
@@ -150,6 +153,9 @@ module.exports = () => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
 
+  app.use(function(req, res, next) {
+    helpers.happyRender(res, req, "error", {});
+  });
   return app;
 };
 
