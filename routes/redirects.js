@@ -4,6 +4,11 @@ const helpers = require('../lib/helpers');
 const dbGet = require('../db/queries/db_get')
 const dbPut = require('../db/queries/db_put')
 
+// MATT WORKING ON EMAIL FUNCTIONALITY USER VOTES
+const { emailOnVote } = require(process.env.USER_COMMUNICATION_MODULE);
+const { getPollClosed } = require(process.env.DB_GET_LOCATION);
+
+// MATT WORKING 
 
 const app = express();
 app.use(cookieSession({
@@ -152,13 +157,21 @@ module.exports = () => {
       poll_ratings.push({ "name": option, "rank": ranking })
       ranking--;
     }
-    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    dbPut.putPollRatings(req.session.pollID, poll_ratings)
     // This doesn't return the promise across modules. We will have to discuss how important it is to impliment this as it will mean rewritting
     // .catch(error => {
     //   res.render('error', { errCode: "Unable to insert ranking", errMsg: error });
     // });
 
     helpers.happyRedirect(res, req, `/vote_submitted/`);
+
+
+    
+    
+    getPollClosed(req.session.pollID)
+      .then((res)=>{console.table(res.rows)});
+
+    emailOnVote(req.session.pollID);
   });
 
   app.get("/vote_submitted/", (req, res) => {

@@ -103,22 +103,18 @@ const getAllPhoneNumbersForPoll = function(poll_id) {
     .then(res => res.rows);
 }
 
-// getAllPhoneNumbersForPoll(4)
+////////////// MATT CURENTLY MAKING ///////////////////////////////////
+////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////
 
-// const makeGetQuery = function (selection, table, where) {
-//   let queryString = `SELECT ${selection}
-//   FROM ${table}
-//   `;
+const getPollClosed = function(poll_id) {
+  return db_client.query(`
+    SELECT total_votes, max_votes, time_to_death
+    FROM polls
+    WHERE id = $1
+  `, [poll_id]);
+}
 
-//   if (where) {
-//     queryString += `WHERE ${where}
-//     `;
-//   }
-
-//   return queryString;
-// };
-
-// getPollRatings(8);
 
 module.exports = {
   getPollRatings,
@@ -128,5 +124,6 @@ module.exports = {
   getPollChoices,
   getPollRatings,
   getPollIdByAdminLink,
-  getAllPhoneNumbersForPoll
+  getAllPhoneNumbersForPoll,
+  getPollClosed
 };

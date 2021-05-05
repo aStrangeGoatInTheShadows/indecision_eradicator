@@ -43,12 +43,6 @@ const sendPollToDatabase = function(poll) {
   return db_client.query(queryString, queryParams);
 };
 
-// (1,'should i quit my job', 'where we should go', 'www.lifehouselab.ca', 'a fake link', CURRENT_TIMESTAMP , null)
-// sendPollToDatabase(some_poll)
-// .then(res => console.log(res.rows))
-// .then(()=>{db_client.end()});
-
-// //////////////////////////////// WORKING ABOVE TEST makePutQuery //////////////////
 
 /**
  * put_new_poll
@@ -63,7 +57,7 @@ const put_new_poll = function(some_poll) {
     })
     .catch((err) =>
       console.log(
-        "HOLY FUCK WHAT THE HELL HAPPENED with creating a new pole",
+        "We tried to create a new poll.... we failed",
         err
       )
     );
@@ -89,7 +83,6 @@ const putAllPollChoices = function(choice_names, poll_id) {
     queryParams,
     true
   );
-
   queryParams = queryParams.flat();
 
   console.log(queryString);
@@ -130,18 +123,19 @@ const putPollRatings = function(poll_id, poll_ratings) {
           WHERE id = $1
         `;
 
-        // console.log("poll_ratings[index]: ", poll_ratings[index])
-        // console.log("index: ", index)
         index++;
         db_client.query(queryString, [row.id])
       }
-    })
+
+      // This increments the vote count
+      db_client.query(`
+        UPDATE polls
+        SET total_votes = total_votes + 1
+        WHERE id = $1`, [poll_id]);    
+    })    
     .catch((err) => {
-      console.log("not quite right", err);
+      console.log("not quite right on db_put side", err);
       return false;
-    })
-    .then(() => {
-      return true;
     })
 };
 
