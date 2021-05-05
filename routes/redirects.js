@@ -1,8 +1,10 @@
-const cookieSession = require("cookie-session");
-const express = require("express");
-const helpers = require("../lib/helpers");
-const dbGet = require("../db/queries/db_get");
-const dbPut = require("../db/queries/db_put");
+const cookieSession = require('cookie-session');
+const express = require('express');
+const helpers = require('../lib/helpers');
+const comms = require('../lib/user_communication');
+const dbGet = require('../db/queries/db_get');
+const dbPut = require('../db/queries/db_put');
+
 
 const app = express();
 app.use(
@@ -50,7 +52,6 @@ module.exports = () => {
       req.session.numPolls = req.body.poll_num_of_options;
       req.session.adminLink = newLink + "/admin";
       req.session.surveyLink = newLink;
-
       helpers.happyRedirect(res, req, "create_poll_options");
     });
   });
@@ -63,7 +64,7 @@ module.exports = () => {
     const templateVars = {
       numPolls: req.session.numPolls,
       options: [req.session.numPolls],
-    };
+    }                ;
     helpers.happyRender(res, req, "create_poll_options", templateVars);
   });
 
@@ -74,7 +75,8 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-
+    comms.emailOnNewPoll(req.session.pollID);
+    comms.smsOnPollCompletion(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
