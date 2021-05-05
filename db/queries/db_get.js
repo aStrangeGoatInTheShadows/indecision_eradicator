@@ -115,6 +115,13 @@ const getPollClosed = function(poll_id) {
   `, [poll_id]);
 }
 
+const getCreatorById = function (id) {
+  return db_client.query(`
+  SELECT *
+  FROM creator
+  WHERE id = $1
+`, [id]);
+}
 
 module.exports = {
   getPollRatings,
@@ -125,5 +132,6 @@ module.exports = {
   getPollRatings,
   getPollIdByAdminLink,
   getAllPhoneNumbersForPoll,
-  getPollClosed
+  getPollClosed,
+  getCreatorById
 };
