@@ -66,25 +66,23 @@ button {
   border-radius: 20px;
 }
 
-input {
+li.user-options {
   text-align: center;
   font-weight: 600;
   color: #fff;
+  line-height: 40px;
 
   background: #E48181;
   border-radius: 5px;
 
   width: 350px;
   height: 40px;
-  margin: 10px 0; 
+  margin: 10px 0;
 }
 
-.fa-bars {
-  color: #000000;
-  position: relative;
-  left: 150px;
-  bottom: 40px;
-  z-index: 1;
+ul {
+  margin: 0px;
+  padding: 0px;
 }
 
 .fa-chevron-circle-left {
