@@ -152,9 +152,12 @@ module.exports = () => {
       poll_ratings.push({ "name": option, "rank": ranking })
       ranking--;
     }
-    dbPut.putPollRatings(req.session.pollID, poll_ratings).catch(error => {
-      res.render('error', { errCode: "Unable to insert ranking", errMsg: error });
-    });
+    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    // This doesn't return the promise across modules. We will have to discuss how important it is to impliment this as it will mean rewritting
+    // .catch(error => {
+    //   res.render('error', { errCode: "Unable to insert ranking", errMsg: error });
+    // });
+
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
