@@ -17,7 +17,7 @@ const some_poll = {
  * @param {} poll An object containing everything to setup a poll
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-const sendPollToDatabase = function (poll) {
+const sendPollToDatabase = function(poll) {
   console.log("creating a new poll");
 
   const queryParams = [];
@@ -55,7 +55,7 @@ const sendPollToDatabase = function (poll) {
  * @param {} some_poll An object containing everything to setup a poll
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-const put_new_poll = function (some_poll) {
+const put_new_poll = function(some_poll) {
   return sendPollToDatabase(some_poll)
     .then((res) => {
       console.log("added new poll to db with id:", res.rows[0].id);
@@ -75,7 +75,7 @@ const put_new_poll = function (some_poll) {
    pollID: 1
    @return: none
 */
-const putAllPollChoices = function (choice_names, poll_id) {
+const putAllPollChoices = function(choice_names, poll_id) {
   let queryParams = [];
   for (let name of choice_names) {
     const param = [poll_id, name];
@@ -104,7 +104,7 @@ const putAllPollChoices = function (choice_names, poll_id) {
    @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1
    @return: true/false for inserted or not
 */
-const putPollRatings = function (poll_id, poll_ratings) {
+const putPollRatings = function(poll_id, poll_ratings) {
   let current_ratings = [];
 
   // Gets the current values from the polls
@@ -132,7 +132,7 @@ const putPollRatings = function (poll_id, poll_ratings) {
         // console.log("index: ", index)
 
         ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
-        
+
         ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
         db_client.query(queryString, [row.id])
 
@@ -149,7 +149,7 @@ const putPollRatings = function (poll_id, poll_ratings) {
    @param : new_ratings : [3,5,8...] whats passed in for user votes
    @return: true/false for inserted or not
 */
-const sumOurRatings = function (current_ratings, new_ratings) {
+const sumOurRatings = function(current_ratings, new_ratings) {
   const arr_of_ratings = [];
   for (let index in current_ratings) {
     arr_of_ratings.push(current_ratings[index].rating + new_ratings[index]);
@@ -157,6 +157,58 @@ const sumOurRatings = function (current_ratings, new_ratings) {
 
   return arr_of_ratings;
 };
+
+
+/**
+ * sendPollToDatabase
+ * @param {} poll An object containing everything to setup a poll
+ * @return {Promise<[{}]>}  A promise to the properties.
+ */
+const sendCreatorToDatabase = function(creator) {
+  console.log("creating a new poll Creator: ", creator);
+
+  const queryParams = [];
+
+  for (const key in creator) {
+    queryParams.push(creator[key]);
+  }
+
+  const properties = [
+    "email",
+    "user_name",
+    "password",
+    "phone_number"
+  ];
+  let queryString = makePutQuery("creator", properties, queryParams, true);
+
+  console.log("sendPollToDatabase query", queryString, queryParams);
+
+  return db_client.query(queryString, queryParams);
+};
+
+/** given the admin Link return the pollID 
+   @params newCreator: newCreator = {
+            email: req.body.creator_email,
+            user_name: req.body.creator_email,
+            password: "password",
+            phone_number: null
+          }
+   @return: promise with the newly creator_id
+*/
+const insertIntoCreators = function(creator) {
+  console.log(creator)
+  return sendCreatorToDatabase(creator)
+    .then((res) => {
+      console.log("added new creator to db with id:", res.rows[0].id);
+      return res.rows[0].id;
+    })
+    .catch((err) =>
+      console.log(
+        "HOLY FUCK WHAT THE HELL HAPPENED with creating a new CREATOR",
+        err
+      )
+    );
+}
 
 // // do poll ratings for our dumb fat ex
 // const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
@@ -178,5 +230,6 @@ module.exports = {
   putPollRatings,
   putAllPollChoices,
   put_new_poll,
+  insertIntoCreators,
   // sendPollToDatabase
 };

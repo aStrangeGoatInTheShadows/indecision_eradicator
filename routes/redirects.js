@@ -57,7 +57,8 @@ module.exports = () => {
       req.session.adminLink = newLink + "/admin";
       req.session.surveyLink = newLink;
 
-      dbGet.getCreatorIdByEmail(req.body.email).then(get_creator_id => {
+      dbGet.getCreatorIdByEmail(req.body.creator_email).then(get_creator_id => {
+        // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
         if (get_creator_id) {
           newPoll.creator_id = get_creator_id;
           dbPut.put_new_poll(newPoll).then((result) => {
@@ -73,6 +74,7 @@ module.exports = () => {
             phone_number: null
           }
           dbPut.insertIntoCreators(newCreator).then(new_create_id => {
+            // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
             newPoll.creator_id = new_create_id;
             dbPut.put_new_poll(newPoll).then((result) => {
               req.session.pollID = result;
