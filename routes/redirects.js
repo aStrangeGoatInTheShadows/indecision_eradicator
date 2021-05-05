@@ -125,6 +125,7 @@ module.exports = () => {
         optionsArr.push(option.name);
       }
       const templateVars = {
+        userid: req.params.id,
         options: optionsArr,
         numPolls: optionsArr.length
       };
