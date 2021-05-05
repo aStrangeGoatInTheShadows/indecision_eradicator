@@ -54,7 +54,7 @@ div.landing-container {
   text-shadow: 4px 4px black;
 }
 
-.button {
+button {
   font-weight: 600;
   color: #ffffff;
   padding: 8px 35px;
