@@ -23,12 +23,10 @@ module.exports = () => {
 
   /*gets from to create a poll  */
   app.get("/create_poll", (req, res) => {
-    const templateVars = {
-    };
-    helpers.happyRender(res, req, "create_polls", templateVars);
+    helpers.happyRender(res, req, "create_polls", {});
   });
 
-  /* gets all poll data from form, creates a new link, pushes poll to db, and redirects
+  /* gets all poll data from form, pushes poll to db, and redirects
    to create poll options
    */
   app.post("/create_poll", (req, res) => {
@@ -103,8 +101,13 @@ module.exports = () => {
           numPolls: optionsArr.length
         };
         helpers.happyRender(res, req, "admin_view", templateVars);
+      }).catch(error => {
+        res.render('error', { errCode: "Unable to get pollRatings: ", errMsg: error });
       });
-    });
+    })
+      .catch(error => {
+        res.render('error', { errCode: "Unable to get ID link", errMsg: error });
+      });
   });
 
   app.get("/poll/:id/", (req, res) => {
@@ -113,8 +116,9 @@ module.exports = () => {
       req.session.pollID = linkRes.id;
       const templateVars = { userid: req.params.id };
       helpers.happyRender(res, req, "user_landing", templateVars);
-    }
-    );
+    }).catch(error => {
+      res.render('error', { errCode: "Unable to get pollID link", errMsg: error });
+    });
   });
 
   app.post("/poll/:id/", (req, res) => {
@@ -133,6 +137,8 @@ module.exports = () => {
         numPolls: optionsArr.length
       };
       helpers.happyRender(res, req, "user_voting", templateVars);
+    }).catch(error => {
+      res.render('error', { errCode: "Unable to get Poll Choices", errMsg: error });
     });
   });
 
@@ -146,15 +152,18 @@ module.exports = () => {
       poll_ratings.push({ "name": option, "rank": ranking })
       ranking--;
     }
-    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    dbPut.putPollRatings(req.session.pollID, poll_ratings).catch(error => {
+      res.render('error', { errCode: "Unable to insert ranking", errMsg: error });
+    });
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
+
   app.get("/vote_submitted/", (req, res) => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
 
   app.use(function(req, res, next) {
-    helpers.happyRender(res, req, "error", {});
+    helpers.happyRender(res, req, "error", { errCode: 404, errMsg: " The requested url does not exist" });
   });
   return app;
 };
