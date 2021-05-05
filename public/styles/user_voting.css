@@ -48,7 +48,6 @@ body {
   color: #6d6d6d;
 }
 
-
 form {
   display: flex;
   flex-direction: column;
@@ -66,7 +65,7 @@ button {
   border-radius: 20px;
 }
 
-li.user-options {
+li.ui-state-default input {
   text-align: center;
   font-weight: 600;
   color: #fff;
@@ -80,9 +79,14 @@ li.user-options {
   margin: 10px 0;
 }
 
+input:hover {
+  cursor:default;
+}
+
 ul {
   margin: 0px;
   padding: 0px;
+  list-style-type: none;
 }
 
 .fa-chevron-circle-left {
@@ -91,4 +95,18 @@ ul {
   z-index:9;
   top: 33px;
   left: 10px;
+}
+
+a.fa-chevron-circle-left:link {
+  text-decoration: none;
+}
+
+.fa-bars {
+  color: #000;
+  position: relative;
+  right: 30px;
+}
+
+.fa-bars:hover {
+  cursor: grab;
 }
