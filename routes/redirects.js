@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const helpers = require('../lib/helpers');
-const comms = require('../lib/user_communication');
+// const comms = require('../lib/user_communication');
 const dbGet = require('../db/queries/db_get');
 const dbPut = require('../db/queries/db_put');
 
@@ -49,39 +49,40 @@ module.exports = () => {
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
     };
-    if (!req.body.poll_title || !req.body.email) {
-      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_polls");
+    if (!req.body.poll_title || !req.body.creator_email) {
+      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
     }
-    req.session.numPolls = req.body.poll_num_of_options;
-    req.session.adminLink = newLink + "/admin";
-    req.session.surveyLink = newLink;
+    else {
+      req.session.numPolls = req.body.poll_num_of_options;
+      req.session.adminLink = newLink + "/admin";
+      req.session.surveyLink = newLink;
 
-    dbGet.getCreatorIdByEmail(req.body.email).then(get_creator_id => {
-      if (get_creator_id) {
-        newPoll.creator_id = get_creator_id;
-        dbPut.put_new_poll(newPoll).then((result) => {
-          req.session.pollID = result;
-          helpers.happyRedirect(res, req, "create_poll_options");
-        });
-      }
-      else {
-        const newCreator = {
-          email: req.body.creator_email,
-          user_name: req.body.creator_email,
-          password: "password",
-          phone_number: null
-        }
-        dbPut.insertIntoCreators(newCreator).then(new_create_id => {
-          newPoll.creator_id = new_create_id;
+      dbGet.getCreatorIdByEmail(req.body.email).then(get_creator_id => {
+        if (get_creator_id) {
+          newPoll.creator_id = get_creator_id;
           dbPut.put_new_poll(newPoll).then((result) => {
             req.session.pollID = result;
             helpers.happyRedirect(res, req, "create_poll_options");
           });
-        })
-      }
-    });
+        }
+        else {
+          const newCreator = {
+            email: req.body.creator_email,
+            user_name: req.body.creator_email,
+            password: "password",
+            phone_number: null
+          }
+          dbPut.insertIntoCreators(newCreator).then(new_create_id => {
+            newPoll.creator_id = new_create_id;
+            dbPut.put_new_poll(newPoll).then((result) => {
+              req.session.pollID = result;
+              helpers.happyRedirect(res, req, "create_poll_options");
+            });
+          })
+        }
+      })
+    }
   });
-
   /* gets page to input poll options */
   app.get("/create_poll_options", (req, res) => {
     if (!req.session.numPolls) {
@@ -101,8 +102,8 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    comms.emailOnNewPoll(req.session.pollID);
-    comms.smsOnPollCompletion(req.session.pollID);
+    // comms.emailOnNewPoll(req.session.pollID);
+    // comms.smsOnPollCompletion(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
@@ -200,10 +201,13 @@ module.exports = () => {
     const poll_ratings = [];
 
     /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
+    // console.log(req.body);
     let ranking = Object.keys(req.body).length;
+    // console.log("number of options", ranking);
     for (const key in req.body) {
       const option = req.body[key];
       poll_ratings.push({ name: option, rank: ranking });
+      console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
@@ -216,7 +220,7 @@ module.exports = () => {
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     // .then(()=>{console.log('our promise was returned successfully')});
-    //  helpers.happyRedirect(res, req, `/vote_submitted/`);
+    helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
   app.get("/vote_submitted/", (req, res) => {
