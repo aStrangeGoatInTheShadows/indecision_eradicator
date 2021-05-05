@@ -66,6 +66,14 @@ button {
   border-radius: 20px;
 }
 
+button:hover {
+  background: #AC4343;
+}
+
+button:active {
+  background: #E55959;
+}
+
 input {
   text-align: center;
   font-weight: 600;

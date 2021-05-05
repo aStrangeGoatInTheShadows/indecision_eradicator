@@ -20,6 +20,26 @@ body {
   justify-content: center;
 }
 
+#error-msg {
+  font-size: 19px;
+  font-weight:bold;
+  color: red;
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  width: 50%;
+
+  box-shadow: 5px 5px 7px #0000009e;
+  border-radius: 10px;
+
+  animation: grow 0.35s;
+}
+
+@keyframes grow {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
 img#unicorn {
   display: block;
   margin: 105px auto 20px;
@@ -64,4 +84,12 @@ button {
   margin: 30px 0px; 
   background: #E26B6B;
   border-radius: 20px;
+}
+
+button:hover {
+  background: #AC4343;
+}
+
+button:active {
+  background: #E55959;
 }

@@ -21,6 +21,10 @@
     
     <div class="container">
       <form class="input-container" action="/create_poll" method="post">
+        <% if(errorMsg) { %>
+        <div id="error-msg"><i class="fas fa-exclamation"></i><%= errorMsg %><i class="fas fa-exclamation"></i></div>
+        <% } %>
+
         <span>
           <input type="text" name="poll_title" id="poll_title" placeholder="Poll Title"/>
         </span>

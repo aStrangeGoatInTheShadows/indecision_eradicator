@@ -17,7 +17,7 @@ body {
   color: blue;
 }
 
-.button {
+button {
   font-weight: 600;
   color: #ffffff;
   padding: 8px 35px;
@@ -25,4 +25,12 @@ body {
 
   background: #E26B6B;
   border-radius: 20px;
+}
+
+button:hover {
+  background: #AC4343;
+}
+
+button:active {
+  background: #E55959;
 }

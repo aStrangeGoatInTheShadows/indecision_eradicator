@@ -63,6 +63,14 @@ button {
   border-radius: 20px;
 }
 
+button:hover {
+  background: #AC4343;
+}
+
+button:active {
+  background: #E55959;
+}
+
 .small-text {
   position: fixed;
   right: 0px;
