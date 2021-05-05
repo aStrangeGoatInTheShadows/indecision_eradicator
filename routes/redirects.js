@@ -40,7 +40,7 @@ module.exports = () => {
   app.post("/create_poll", (req, res) => {
     const newLink = helpers.generateLink();
     const newPoll = {
-      creator_id: 1,
+      creator_id: null,
       title: req.body.poll_title,
       description: req.body.poll_descr,
       admin_link: newLink + "/admin",
@@ -49,20 +49,42 @@ module.exports = () => {
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
     };
-
     if (!req.body.poll_title || !req.body.creator_email) {
       helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
-    } else {
-      dbPut.put_new_poll(newPoll).then((result) => {
-        req.session.pollID = result;
-        req.session.numPolls = req.body.poll_num_of_options;
-        req.session.adminLink = newLink + "/admin";
-        req.session.surveyLink = newLink;
-        helpers.happyRedirect(res, req, "create_poll_options");
-      });
+    }
+    else {
+      req.session.numPolls = req.body.poll_num_of_options;
+      req.session.adminLink = newLink + "/admin";
+      req.session.surveyLink = newLink;
+
+      dbGet.getCreatorIdByEmail(req.body.creator_email).then(get_creator_id => {
+        // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
+        if (get_creator_id) {
+          newPoll.creator_id = get_creator_id;
+          dbPut.put_new_poll(newPoll).then((result) => {
+            req.session.pollID = result;
+            helpers.happyRedirect(res, req, "create_poll_options");
+          });
+        }
+        else {
+          const newCreator = {
+            email: req.body.creator_email,
+            user_name: req.body.creator_email,
+            password: "password",
+            phone_number: null
+          }
+          dbPut.insertIntoCreators(newCreator).then(new_create_id => {
+            // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
+            newPoll.creator_id = new_create_id;
+            dbPut.put_new_poll(newPoll).then((result) => {
+              req.session.pollID = result;
+              helpers.happyRedirect(res, req, "create_poll_options");
+            });
+          })
+        }
+      })
     }
   });
-
   /* gets page to input poll options */
   app.get("/create_poll_options", (req, res) => {
     if (!req.session.numPolls) {
