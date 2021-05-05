@@ -71,8 +71,8 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    emailOnNewPoll(req.session.pollID);
-    smsOnPollCompletion(req.session.pollID);
+    comms.emailOnNewPoll(req.session.pollID);
+    comms.smsOnPollCompletion(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
