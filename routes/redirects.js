@@ -9,11 +9,18 @@ const { emailOnVote } = require(process.env.USER_COMMUNICATION_MODULE);
 const { getPollClosed } = require(process.env.DB_GET_LOCATION);
 
 // MATT WORKING 
+const comms = require('../lib/user_communication');
+const dbGet = require('../db/queries/db_get');
+const dbPut = require('../db/queries/db_put');
 
 const app = express();
-app.use(cookieSession({
-  name: 'session', keys: ["secret", "keys"], maxAge: (24 * 60 * 60 * 1000) //max age 24hrs
-}));
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["secret", "keys"],
+    maxAge: 24 * 60 * 60 * 1000, //max age 24hrs
+  })
+);
 
 module.exports = () => {
   app.get("/", (req, res) => {
@@ -23,12 +30,16 @@ module.exports = () => {
     res.redirect("/");
   });
   app.get("/home", (req, res) => {
-    res.redirect("/")
+    res.redirect("/");
   });
 
   /*gets from to create a poll  */
   app.get("/create_poll", (req, res) => {
-    helpers.happyRender(res, req, "create_polls", {});
+    let errorMessage = "";
+    if (req.session.error) {
+      errorMessage = req.session.error;
+    }
+    helpers.happyRender(res, req, "create_polls", { errorMsg: errorMessage });
   });
 
   /* gets all poll data from form, pushes poll to db, and redirects
@@ -44,15 +55,17 @@ module.exports = () => {
       survey_link: newLink,
       time_created: new Date().toISOString(),
       time_closed: null, //time of vote completion(using as bool) //stretch
-      time_to_death: null //countdown to poll //stretch
+      time_to_death: null, //countdown to poll //stretch
+    };
+    if (!req.body.poll_title || !req.body.email) {
+      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_polls");
     }
 
-    dbPut.put_new_poll(newPoll).then(result => {
+    dbPut.put_new_poll(newPoll).then((result) => {
       req.session.pollID = result;
       req.session.numPolls = req.body.poll_num_of_options;
       req.session.adminLink = newLink + "/admin";
       req.session.surveyLink = newLink;
-
       helpers.happyRedirect(res, req, "create_poll_options");
     });
   });
@@ -76,7 +89,8 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-
+    comms.emailOnNewPoll(req.session.pollID);
+    comms.smsOnPollCompletion(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
@@ -93,37 +107,54 @@ module.exports = () => {
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    dbGet.getPollIdByAdminLink(adminLink).then(linkRes => {
-      const pollID = linkRes.id;
-      dbGet.getPollRatings(pollID).then(result => {
-        console.log(result)
-        const optionsArr = []
-        for (const option of result) {
-          optionsArr.push(option.name);
-        }
-        const templateVars = {
-          options: optionsArr,
-          numPolls: optionsArr.length
-        };
-        helpers.happyRender(res, req, "admin_view", templateVars);
-      }).catch(error => {
-        res.render('error', { errCode: "Unable to get pollRatings: ", errMsg: error });
-      });
-    })
-      .catch(error => {
-        res.render('error', { errCode: "Unable to get ID link", errMsg: error });
+    dbGet
+      .getPollIdByAdminLink(adminLink)
+      .then((linkRes) => {
+        const pollID = linkRes.id;
+        dbGet
+          .getPollRatings(pollID)
+          .then((result) => {
+            console.log(result);
+            const optionsArr = [];
+            for (const option of result) {
+              optionsArr.push(option.name);
+            }
+            const templateVars = {
+              options: optionsArr,
+              numPolls: optionsArr.length,
+            };
+            helpers.happyRender(res, req, "admin_view", templateVars);
+          })
+          .catch((error) => {
+            res.render("error", {
+              errCode: "Unable to get pollRatings: ",
+              errMsg: error,
+            });
+          });
+      })
+      .catch((error) => {
+        res.render("error", {
+          errCode: "Unable to get ID link",
+          errMsg: error,
+        });
       });
   });
 
   app.get("/poll/:id/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    dbGet.getPollIdByAdminLink(adminLink).then(linkRes => {
-      req.session.pollID = linkRes.id;
-      const templateVars = { userid: req.params.id };
-      helpers.happyRender(res, req, "user_landing", templateVars);
-    }).catch(error => {
-      res.render('error', { errCode: "Unable to get pollID link", errMsg: error });
-    });
+    dbGet
+      .getPollIdByAdminLink(adminLink)
+      .then((linkRes) => {
+        req.session.pollID = linkRes.id;
+        const templateVars = { userid: req.params.id };
+        helpers.happyRender(res, req, "user_landing", templateVars);
+      })
+      .catch((error) => {
+        res.render("error", {
+          errCode: "Unable to get pollID link",
+          errMsg: error,
+        });
+      });
   });
 
   app.post("/poll/:id/", (req, res) => {
@@ -131,20 +162,26 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/uservoting/", (req, res) => {
-    dbGet.getPollChoices(req.session.pollID).then(result => {
-      const optionsArr = []
-      for (const option of result) {
-        optionsArr.push(option.name);
-      }
-      const templateVars = {
-        userid: req.params.id,
-        options: optionsArr,
-        numPolls: optionsArr.length
-      };
-      helpers.happyRender(res, req, "user_voting", templateVars);
-    }).catch(error => {
-      res.render('error', { errCode: "Unable to get Poll Choices", errMsg: error });
-    });
+    dbGet
+      .getPollChoices(req.session.pollID)
+      .then((result) => {
+        const optionsArr = [];
+        for (const option of result) {
+          optionsArr.push(option.name);
+        }
+        const templateVars = {
+          userid: req.params.id,
+          options: optionsArr,
+          numPolls: optionsArr.length,
+        };
+        helpers.happyRender(res, req, "user_voting", templateVars);
+      })
+      .catch((error) => {
+        res.render("error", {
+          errCode: "Unable to get Poll Choices",
+          errMsg: error,
+        });
+      });
   });
 
   app.post("/poll/:id/uservoting/", (req, res) => {
@@ -154,9 +191,10 @@ module.exports = () => {
     let ranking = Object.keys(req.body).length;
     for (const key in req.body) {
       const option = req.body[key];
-      poll_ratings.push({ "name": option, "rank": ranking })
+      poll_ratings.push({ name: option, rank: ranking });
       ranking--;
     }
+<<<<<<< HEAD
     dbPut.putPollRatings(req.session.pollID, poll_ratings)
     // This doesn't return the promise across modules. We will have to discuss how important it is to impliment this as it will mean rewritting
     // .catch(error => {
@@ -172,6 +210,19 @@ module.exports = () => {
       .then((res)=>{console.table(res.rows)});
 
     emailOnVote(req.session.pollID);
+=======
+    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
+    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
+
+    //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
+    /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
+
+    /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
+
+    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    // .then(()=>{console.log('our promise was returned successfully')});
+    //  helpers.happyRedirect(res, req, `/vote_submitted/`);
+>>>>>>> 187330ce28e492007fe7e8f93740ae6c0a0dfd29
   });
 
   app.get("/vote_submitted/", (req, res) => {
@@ -179,8 +230,10 @@ module.exports = () => {
   });
 
   app.use(function(req, res, next) {
-    helpers.happyRender(res, req, "error", { errCode: 404, errMsg: " The requested url does not exist" });
+    helpers.happyRender(res, req, "error", {
+      errCode: 404,
+      errMsg: " The requested url does not exist",
+    });
   });
   return app;
 };
-
