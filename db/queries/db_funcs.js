@@ -45,7 +45,7 @@ getPollOptions(pollID)
    pollID: 1
    @return: none
 */
-insertPollOptions(pollOptions,pollID) // IMPLEMENTED ///////////////////////////////////////////////////////////////////////////
+insertPollOptions(pollOptions, pollID) // IMPLEMENTED ///////////////////////////////////////////////////////////////////////////
 // AS const putAllPollChoices = function (choice_names, poll_id) 
 // choice_names is an array of strings
 // poll_id is integer database id for poll
@@ -71,3 +71,21 @@ insertPollRatings(pollRatings)
    @return: the admin's id
 */
 getPollId(adminLink)
+
+/** given the admin Link return the pollID 
+   @params email: blah@gmail.com
+   @return: promise with creator_id
+*/
+getCreatorIdByEmail(email)
+
+
+/** given the admin Link return the pollID 
+   @params newCreator: newCreator = {
+            email: req.body.creator_email,
+            user_name: req.body.creator_email,
+            password: "password",
+            phone_number: null
+          }
+   @return: promise with the newly creator_id
+*/
+insertIntoCreators(creator)
