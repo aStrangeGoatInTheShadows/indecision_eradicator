@@ -111,10 +111,9 @@ const putPollRatings = function (poll_id, poll_ratings) {
   getPollRatings(poll_id)
     .then((table_data) => {
       current_ratings = table_data;
-      // console.log("current_ratings: ", current_ratings)
+      console.log("current_ratings: ", current_ratings)
     })
     .then(() => {
-      let index = 0;
 
       // console.log("poll_ratings: ", poll_ratings)
       for (let row of current_ratings) {
@@ -131,13 +130,14 @@ const putPollRatings = function (poll_id, poll_ratings) {
 
         // console.log("poll_ratings[index]: ", poll_ratings[index])
         // console.log("index: ", index)
-        index++;
 
         ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
-
+        
         ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
-        return db_client.query(queryString, [row.id])
+        db_client.query(queryString, [row.id])
+
       }
+
     })
     .catch((err) => {
       return err;

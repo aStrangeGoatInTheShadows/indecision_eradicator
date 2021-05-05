@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const helpers = require('../lib/helpers');
-const comms = require('../lib/user_communication');
+// const comms = require('../lib/user_communication');
 const dbGet = require('../db/queries/db_get');
 const dbPut = require('../db/queries/db_put');
 
@@ -49,17 +49,18 @@ module.exports = () => {
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
     };
-    if (!req.body.poll_title || !req.body.email) {
-      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_polls");
-    }
 
-    dbPut.put_new_poll(newPoll).then((result) => {
-      req.session.pollID = result;
-      req.session.numPolls = req.body.poll_num_of_options;
-      req.session.adminLink = newLink + "/admin";
-      req.session.surveyLink = newLink;
-      helpers.happyRedirect(res, req, "create_poll_options");
-    });
+    if (!req.body.poll_title || !req.body.creator_email) {
+      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
+    } else {
+      dbPut.put_new_poll(newPoll).then((result) => {
+        req.session.pollID = result;
+        req.session.numPolls = req.body.poll_num_of_options;
+        req.session.adminLink = newLink + "/admin";
+        req.session.surveyLink = newLink;
+        helpers.happyRedirect(res, req, "create_poll_options");
+      });
+    }
   });
 
   /* gets page to input poll options */
@@ -81,8 +82,8 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    comms.emailOnNewPoll(req.session.pollID);
-    comms.smsOnPollCompletion(req.session.pollID);
+    // comms.emailOnNewPoll(req.session.pollID);
+    // comms.smsOnPollCompletion(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
@@ -180,10 +181,13 @@ module.exports = () => {
     const poll_ratings = [];
 
     /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
+    // console.log(req.body);
     let ranking = Object.keys(req.body).length;
+    // console.log("number of options", ranking);
     for (const key in req.body) {
       const option = req.body[key];
       poll_ratings.push({ name: option, rank: ranking });
+      console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
@@ -196,7 +200,7 @@ module.exports = () => {
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     // .then(()=>{console.log('our promise was returned successfully')});
-    //  helpers.happyRedirect(res, req, `/vote_submitted/`);
+    helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
   app.get("/vote_submitted/", (req, res) => {
