@@ -5,7 +5,6 @@ const comms = require('../lib/user_communication');
 const dbGet = require('../db/queries/db_get');
 const dbPut = require('../db/queries/db_put');
 
-
 const app = express();
 app.use(
   cookieSession({
@@ -28,7 +27,11 @@ module.exports = () => {
 
   /*gets from to create a poll  */
   app.get("/create_poll", (req, res) => {
-    helpers.happyRender(res, req, "create_polls", {});
+    let errorMessage = "";
+    if (req.session.error) {
+      errorMessage = req.session.error;
+    }
+    helpers.happyRender(res, req, "create_polls", { errorMsg: errorMessage });
   });
 
   /* gets all poll data from form, pushes poll to db, and redirects
@@ -46,6 +49,9 @@ module.exports = () => {
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
     };
+    if (!req.body.poll_title || !req.body.email) {
+      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_polls");
+    }
 
     dbPut.put_new_poll(newPoll).then((result) => {
       req.session.pollID = result;
@@ -64,7 +70,7 @@ module.exports = () => {
     const templateVars = {
       numPolls: req.session.numPolls,
       options: [req.session.numPolls],
-    }                ;
+    };
     helpers.happyRender(res, req, "create_poll_options", templateVars);
   });
 
@@ -182,14 +188,14 @@ module.exports = () => {
     }
     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-    
+
     //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
     /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
-    
+
     /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
-      // .then(()=>{console.log('our promise was returned successfully')});
+    // .then(()=>{console.log('our promise was returned successfully')});
     //  helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
@@ -197,7 +203,7 @@ module.exports = () => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
 
-  app.use(function (req, res, next) {
+  app.use(function(req, res, next) {
     helpers.happyRender(res, req, "error", {
       errCode: 404,
       errMsg: " The requested url does not exist",
