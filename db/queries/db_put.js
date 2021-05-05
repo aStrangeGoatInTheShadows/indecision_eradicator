@@ -82,7 +82,6 @@ const putAllPollChoices = function(choice_names, poll_id) {
     queryParams.push(param);
   }
 
-  // console.log(queryParams);
 
   const queryString = makePutQuery(
     "poll_choices",
