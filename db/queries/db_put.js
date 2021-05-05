@@ -113,17 +113,26 @@ const putPollRatings = function(poll_id, poll_ratings) {
   getPollRatings(poll_id)
     .then((table_data) => {
       current_ratings = table_data;
+      // console.log("current_ratings: ", current_ratings)
     })
     .then(() => {
       let index = 0;
-      
+
+      // console.log("poll_ratings: ", poll_ratings)
       for (let row of current_ratings) {
+        for (let poll of poll_ratings) {
+          if (poll.name === row.name) {
+            row.rating += poll.rank
+          }
+        }
         const queryString = `
           UPDATE poll_choices
-          SET rating = rating + ${poll_ratings[index][row.name]}
+          SET rating = ${row.rating}
           WHERE id = $1
         `;
 
+        // console.log("poll_ratings[index]: ", poll_ratings[index])
+        // console.log("index: ", index)
         index++;
         db_client.query(queryString, [row.id])
       }
