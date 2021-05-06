@@ -3,13 +3,13 @@ const input = process.argv[2];
 
 // fetches id, title and creation time from a table
 const getAllDebug = function(table) {
-  console.log("fetching all from table :", table);
+  // console.log("fetching all from table :", table);
 
   const queryString = makeGetQuery("id, title, time_created", table);
 
   db_client
     .query(queryString)
-    .then((res) => console.table(res.rows))
+    // .then((res) => console.table(res.rows))
     .catch((err) => console.log("unable to get data", err))
     .finally(() => {
       db_client.end();
@@ -74,7 +74,7 @@ const getPollChoices = function(poll_id) {
 const getPollRatings = function(poll_id) {
   const queryString = makeGetQuery("*", "poll_choices", "poll_id = $1 ORDER BY RATING DESC");
 
-  console.log(queryString);
+  // console.log(queryString);
 
   return db_client.query(queryString, [poll_id])
     .then((res) => { return res.rows })
@@ -114,7 +114,7 @@ const getCreatorIdByEmail = function(email) {
     WHERE email = $1
   `, [email]
   ).then(res => {
-    console.log(res);
+    // console.log(res);
     if (res.rows[0] != undefined) {
       return res.rows[0].id
     }

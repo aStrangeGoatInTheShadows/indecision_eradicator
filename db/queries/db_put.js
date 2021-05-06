@@ -84,8 +84,10 @@ const putAllPollChoices = function(choice_names, poll_id) {
 
   console.log(queryString);
   return db_client.query(queryString, queryParams).then((res) => {
-    if (res.rows[1])
+
+    // if (res.rows[1])
       //console.log("Put all choices returned these id slots", res.rows);
+      
   });
 };
 
