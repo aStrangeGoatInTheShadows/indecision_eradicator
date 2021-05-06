@@ -10,8 +10,7 @@ const { getPollClosed } = require(process.env.DB_GET_LOCATION);
 
 // MATT WORKING 
 const comms = require('../lib/user_communication');
-const dbGet = require('../db/queries/db_get');
-const dbPut = require('../db/queries/db_put');
+
 
 const app = express();
 app.use(
@@ -194,7 +193,6 @@ module.exports = () => {
       poll_ratings.push({ name: option, rank: ranking });
       ranking--;
     }
-<<<<<<< HEAD
     dbPut.putPollRatings(req.session.pollID, poll_ratings)
     // This doesn't return the promise across modules. We will have to discuss how important it is to impliment this as it will mean rewritting
     // .catch(error => {
@@ -202,27 +200,12 @@ module.exports = () => {
     // });
 
     helpers.happyRedirect(res, req, `/vote_submitted/`);
-
-
-    
+  
     
     getPollClosed(req.session.pollID)
       .then((res)=>{console.table(res.rows)});
 
     emailOnVote(req.session.pollID);
-=======
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-
-    //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
-    /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
-
-    /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
-
-    dbPut.putPollRatings(req.session.pollID, poll_ratings);
-    // .then(()=>{console.log('our promise was returned successfully')});
-    //  helpers.happyRedirect(res, req, `/vote_submitted/`);
->>>>>>> 187330ce28e492007fe7e8f93740ae6c0a0dfd29
   });
 
   app.get("/vote_submitted/", (req, res) => {
