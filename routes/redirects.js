@@ -216,7 +216,16 @@ module.exports = () => {
 
     emailOnVote(req.session.pollID);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// SEND ONE EMAIL
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////// SEND FINAL EMAIL ONCE
+/////////////////// DO NOT SEND IT ON SUBSEQUENT PAGE VISITS
+
     dbPut.incrementTotalVotes(req.session.pollID).then(result => {
+
+//////////////////// ALVIN SAYS PUT IN LINE 226
+
       req.session.isClosed = false;
       req.session.total_votes = result.total_votes;
       req.session.max_votes = result.max_votes;
@@ -236,6 +245,12 @@ module.exports = () => {
       templateVars.title = "POLL CLOSED";
       templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} users have submitted the poll...`;
       templateVars.text = "An email will be sent to the creator once the poll is completed"; //replace to the creator with creator name
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// SEND ONE EMAIL
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////// EVER TIME OPENS AFTER COMPLETE WILL GET EMAIL WATCH FOR ROUTING
+
+
     }
     helpers.happyRender(res, req, "vote_submitted", templateVars);
   });
