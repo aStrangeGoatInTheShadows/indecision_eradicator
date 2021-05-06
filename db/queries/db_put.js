@@ -18,8 +18,6 @@ const some_poll = {
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 const sendPollToDatabase = function(poll) {
-  console.log("creating a new poll");
-
   const queryParams = [];
 
   for (const key in poll) {
@@ -38,7 +36,7 @@ const sendPollToDatabase = function(poll) {
   ];
   let queryString = makePutQuery("polls", properties, queryParams, true);
 
-  console.log("sendPollToDatabase query", queryString, queryParams);
+  //console.log("sendPollToDatabase query", queryString, queryParams);
 
   return db_client.query(queryString, queryParams);
 };
@@ -52,7 +50,7 @@ const sendPollToDatabase = function(poll) {
 const put_new_poll = function(some_poll) {
   return sendPollToDatabase(some_poll)
     .then((res) => {
-      console.log("added new poll to db with id:", res.rows[0].id);
+     // console.log("added new poll to db with id:", res.rows[0].id);
       return res.rows[0].id;
     })
     .catch((err) =>
@@ -87,7 +85,7 @@ const putAllPollChoices = function(choice_names, poll_id) {
   console.log(queryString);
   return db_client.query(queryString, queryParams).then((res) => {
     if (res.rows[1])
-      console.log("Put all choices returned these id slots", res.rows);
+      //console.log("Put all choices returned these id slots", res.rows);
   });
 };
 
@@ -104,7 +102,7 @@ const putPollRatings = function(poll_id, poll_ratings) {
   getPollRatings(poll_id)
     .then((table_data) => {
       current_ratings = table_data;
-      console.log("current_ratings: ", current_ratings)
+      //console.log("current_ratings: ", current_ratings)
     })
     .then(() => {
 
@@ -159,7 +157,7 @@ const sumOurRatings = function(current_ratings, new_ratings) {
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 const sendCreatorToDatabase = function(creator) {
-  console.log("creating a new poll Creator: ", creator);
+  //console.log("creating a new poll Creator: ", creator);
 
   const queryParams = [];
 
@@ -175,7 +173,7 @@ const sendCreatorToDatabase = function(creator) {
   ];
   let queryString = makePutQuery("creator", properties, queryParams, true);
 
-  console.log("sendPollToDatabase query", queryString, queryParams);
+  //console.log("sendPollToDatabase query", queryString, queryParams);
 
   return db_client.query(queryString, queryParams);
 };
@@ -190,10 +188,10 @@ const sendCreatorToDatabase = function(creator) {
    @return: promise with the newly creator_id
 */
 const insertIntoCreators = function(creator) {
-  console.log(creator)
+  // console.log(creator)
   return sendCreatorToDatabase(creator)
     .then((res) => {
-      console.log("added new creator to db with id:", res.rows[0].id);
+      //console.log("added new creator to db with id:", res.rows[0].id);
       return res.rows[0].id;
     })
     .catch((err) =>
