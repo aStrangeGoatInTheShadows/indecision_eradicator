@@ -213,13 +213,6 @@ module.exports = () => {
       console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-
-    //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
-    /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
-
-    /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
 
     dbPut.incrementTotalVotes(req.session.pollID).then(result => {
       req.session.isClosed = false;
@@ -233,7 +226,7 @@ module.exports = () => {
 
   app.get("/vote_submitted/", (req, res) => {
     let templateVars = {};
-    if (req.session.isClosed) {
+    if (req.session.isClosed || req.session.total_votes > req.session.max_votes) {
       templateVars.title = "POLL CLOSED";
       templateVars.header = "Sorry, this vote has been closed.";
       templateVars.text = "An email with the results has been sent to the Creator"; //replace to the creator with creator name
