@@ -220,9 +220,9 @@ module.exports = () => {
       ranking--;
     }
 
-    emailOnVote(req.session.pollID);
 
     dbPut.incrementTotalVotes(req.session.pollID).then(result => {
+      emailOnVote(req.session.pollID);
       req.session.isClosed = false;
       req.session.total_votes = result.total_votes;
       req.session.max_votes = result.max_votes;
