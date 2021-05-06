@@ -77,7 +77,7 @@ const getPollRatings = function(poll_id) {
   console.log(queryString);
 
   return db_client.query(queryString, [poll_id])
-    .then((res) => {return res.rows})
+    .then((res) => { return res.rows })
     .catch((err) => { console.log("getPollRatings ", err) });
 };
 
@@ -103,9 +103,27 @@ const getAllPhoneNumbersForPoll = function(poll_id) {
     .then(res => res.rows);
 }
 
-////////////// MATT CURENTLY MAKING ///////////////////////////////////
-////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////
+/** given the admin Link return the pollID
+   @params email: blah@gmail.com
+   @return: promise with creator_id
+*/
+const getCreatorIdByEmail = function(email) {
+  return db_client.query(`
+    SELECT id
+    FROM creator
+    WHERE email = $1
+  `, [email]
+  ).then(res => {
+    console.log(res);
+    if (res.rows[0] != undefined) {
+      return res.rows[0].id
+    }
+    else {
+      return null
+    }
+  }).catch((err) => { console.log("getCreatorIdByEmail ", err) });
+}
+// getAllPhoneNumbersForPoll(4)
 
 const getPollClosed = function(poll_id) {
   return db_client.query(`
@@ -132,6 +150,5 @@ module.exports = {
   getPollRatings,
   getPollIdByAdminLink,
   getAllPhoneNumbersForPoll,
-  getPollClosed,
-  getCreatorById
+  getCreatorIdByEmail
 };
