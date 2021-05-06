@@ -122,7 +122,8 @@ module.exports = () => {
 
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
-    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
+    // const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
+    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
     dbGet.getPollIdByAdminLink(adminLink).then((linkRes) => {
       const pollID = linkRes.id;
       dbGet.getPollRatings(pollID).then((result) => {
@@ -150,7 +151,8 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/", (req, res) => {
-    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
+    // const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
+    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
     dbGet
       .getPollIdByAdminLink(adminLink)
       .then((linkRes) => {
@@ -227,13 +229,19 @@ module.exports = () => {
 
   app.get("/vote_submitted/", (req, res) => {
     let templateVars = {};
-    if (req.session.isClosed || req.session.total_votes > req.session.max_votes) {
+    if (req.session.isClosed || req.session.total_votes >= req.session.max_votes) {
       templateVars.title = "POLL CLOSED";
-      templateVars.header = "Sorry, this vote has been closed.";
-      templateVars.text = "An email with the results has been sent to the Creator"; //replace to the creator with creator name
+
+      if (req.session.total_votes === req.session.max_votes) {
+        templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} has been cast vote is now closing`;
+      } else {
+        templateVars.header = "Sorry, this vote has been closed.";
+      }
+
+      templateVars.text = "Check in with the creator for the results of the poll"; //replace to the creator with creator name
     }
     else {
-      templateVars.title = "POLL CLOSED";
+      templateVars.title = "POLL OPEN";
       templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} users have submitted the poll...`;
       templateVars.text = "An email will be sent to the creator once the poll is completed"; //replace to the creator with creator name
     }
