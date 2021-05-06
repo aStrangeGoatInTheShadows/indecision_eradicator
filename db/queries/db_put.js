@@ -94,11 +94,9 @@ const putAllPollChoices = function(choice_names, poll_id) {
   });
 };
 
-//
-// @Alvin - are these the notes for a different function?
-/**takes a pollID and returns array of pollOptions and ratings
-   @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1
-   @return: true/false for inserted or not
+
+/**Puts poll ratings into the database after a vote
+   @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1   
 */
 const putPollRatings = function(poll_id, poll_ratings) {
   let current_ratings = [];
@@ -124,13 +122,19 @@ const putPollRatings = function(poll_id, poll_ratings) {
           WHERE id = $1
         `;
         db_client.query(queryString, [row.id])
-
       }
+
+      const queryString = `
+        UPDATE polls
+        SET total_votes = total_votes + 1
+        WHERE id = $1
+      `;
+      db_client.query(queryString, [poll_id])
 
     })
     .catch((err) => {
-      console.log("not quite right on db_put side", err);
-      return false;
+      console.log("putPollRatings FAILED during getPollRatings", err);
+    
     })
 };
 
