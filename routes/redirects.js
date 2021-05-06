@@ -39,6 +39,14 @@ module.exports = () => {
    */
   app.post("/create_poll", (req, res) => {
     const newLink = helpers.generateLink();
+
+    // console.log("this app.post/create_poll");
+    // console.log('this is your body', req.body)
+    //////////////////////////////////////////////////////////////////////// MAT WORKING HERE MAX VOTERS
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Currently sets max votes - as stands no increment on vote
+
     const newPoll = {
       creator_id: null,
       title: req.body.poll_title,

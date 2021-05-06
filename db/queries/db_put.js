@@ -24,6 +24,8 @@ const sendPollToDatabase = function(poll) {
     queryParams.push(poll[key]);
   }
 
+  console.log(`sendPollToDatabase here is your poll`, poll)
+
   const properties = [
     "creator_id",
     "title",
@@ -118,18 +120,20 @@ const putPollRatings = function(poll_id, poll_ratings) {
           SET rating = ${row.rating}
           WHERE id = $1
         `;
-
-        // console.log("poll_ratings[index]: ", poll_ratings[index])
-        // console.log("index: ", index)
-        ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
-
-        ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
         db_client.query(queryString, [row.id])
       }
+
+      const queryString = `
+        UPDATE polls
+        SET total_votes = total_votes + 1
+        WHERE id = $1
+      `;
+      db_client.query(queryString, [poll_id])
+
     })
     .catch((err) => {
-      console.log("not quite right on db_put side", err);
-      return false;
+      console.log("putPollRatings FAILED during getPollRatings", err);
+    
     })
 };
 
@@ -198,41 +202,6 @@ const insertIntoCreators = function(creator) {
       )
     );
 }
-
-/** Given the poll ID increase the pollTotal by 1, returning total_votes max_votes
- * @params pollID
- * @return: {total_votes:10, max_votes:11}
- */
-const incrementTotalVotes = function(pollID) {
-  const queryString = `
-          UPDATE polls
-          SET total_votes =total_votes + 1
-          WHERE id = $1
-          RETURNING total_votes, max_votes
-        `;
-
-  // console.log("poll_ratings[index]: ", poll_ratings[index])
-  // console.log("index: ", index)
-  ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
-
-  ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
-  return db_client.query(queryString, [pollID]).then(res => { return res.rows[0]; });
-}
-// // do poll ratings for our dumb fat ex
-// const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
-
-// putPollRatings(8, arr_of_ratings);
-
-// choice_names = [
-//   "feet",
-//   "leg",
-//   "ass",
-//   "grass",
-//   "gas",
-//   "french onion",
-//   "worse survey ever",
-// ];
-// putAllPollChoices(choice_names, 2);
 
 module.exports = {
   putPollRatings,
