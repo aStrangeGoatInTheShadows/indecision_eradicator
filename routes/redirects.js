@@ -122,7 +122,7 @@ module.exports = () => {
 
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
     dbGet.getPollIdByAdminLink(adminLink).then((linkRes) => {
       const pollID = linkRes.id;
       dbGet.getPollRatings(pollID).then((result) => {
@@ -150,7 +150,7 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
     dbGet
       .getPollIdByAdminLink(adminLink)
       .then((linkRes) => {
