@@ -48,6 +48,7 @@ module.exports = () => {
       time_created: new Date().toISOString(),
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
+      max_votes: req.body.max_voters
     };
     if (!req.body.poll_title || !req.body.creator_email) {
       helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
@@ -122,37 +123,30 @@ module.exports = () => {
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
-    dbGet
-      .getPollIdByAdminLink(adminLink)
-      .then((linkRes) => {
-        const pollID = linkRes.id;
-        dbGet
-          .getPollRatings(pollID)
-          .then((result) => {
-            console.log(result);
-            const optionsArr = [];
-            for (const option of result) {
-              optionsArr.push(option.name);
-            }
-            const templateVars = {
-              options: optionsArr,
-              numPolls: optionsArr.length,
-            };
-            helpers.happyRender(res, req, "admin_view", templateVars);
-          })
-          .catch((error) => {
-            res.render("error", {
-              errCode: "Unable to get pollRatings: ",
-              errMsg: error,
-            });
-          });
-      })
-      .catch((error) => {
+    dbGet.getPollIdByAdminLink(adminLink).then((linkRes) => {
+      const pollID = linkRes.id;
+      dbGet.getPollRatings(pollID).then((result) => {
+        const optionsArr = [];
+        for (const option of result) {
+          optionsArr.push(option.name);
+        }
+        const templateVars = {
+          options: optionsArr,
+          numPolls: optionsArr.length,
+        };
+        helpers.happyRender(res, req, "admin_view", templateVars);
+      }).catch((error) => {
         res.render("error", {
-          errCode: "Unable to get ID link",
+          errCode: "Unable to get pollRatings: ",
           errMsg: error,
         });
       });
+    }).catch((error) => {
+      res.render("error", {
+        errCode: "Unable to get ID link",
+        errMsg: error,
+      });
+    });
   });
 
   app.get("/poll/:id/", (req, res) => {
@@ -173,7 +167,14 @@ module.exports = () => {
   });
 
   app.post("/poll/:id/", (req, res) => {
-    helpers.happyRedirect(res, req, `/poll/${req.params.id}/uservoting/`);
+    dbGet.getPollData(req.session.pollID).then(poll => {
+      if (poll.total_votes >= poll.max_votes) {
+        req.session.isClosed = true;
+        helpers.happyRedirect(res, req, `/vote_submitted/`)
+      } else {
+        helpers.happyRedirect(res, req, `/poll/${req.params.id}/uservoting/`);
+      }
+    });
   });
 
   app.get("/poll/:id/uservoting/", (req, res) => {
@@ -215,13 +216,28 @@ module.exports = () => {
 
     emailOnVote(req.session.pollID);
 
-    dbPut.putPollRatings(req.session.pollID, poll_ratings);
-
-    helpers.happyRedirect(res, req, `/vote_submitted/`);
+    dbPut.incrementTotalVotes(req.session.pollID).then(result => {
+      req.session.isClosed = false;
+      req.session.total_votes = result.total_votes;
+      req.session.max_votes = result.max_votes;
+      dbPut.putPollRatings(req.session.pollID, poll_ratings);
+      helpers.happyRedirect(res, req, `/vote_submitted/`)
+    });;
   });
 
   app.get("/vote_submitted/", (req, res) => {
-    helpers.happyRender(res, req, "vote_submitted", {});
+    let templateVars = {};
+    if (req.session.isClosed || req.session.total_votes > req.session.max_votes) {
+      templateVars.title = "POLL CLOSED";
+      templateVars.header = "Sorry, this vote has been closed.";
+      templateVars.text = "An email with the results has been sent to the Creator"; //replace to the creator with creator name
+    }
+    else {
+      templateVars.title = "POLL CLOSED";
+      templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} users have submitted the poll...`;
+      templateVars.text = "An email will be sent to the creator once the poll is completed"; //replace to the creator with creator name
+    }
+    helpers.happyRender(res, req, "vote_submitted", templateVars);
   });
 
   app.use(function(req, res, next) {

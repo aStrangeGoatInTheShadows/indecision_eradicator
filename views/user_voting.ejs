@@ -27,10 +27,10 @@
       <form action="./" method="post">
         <ul id="sortable">
         <% for(let i = 0; i < numPolls; i++){ %>
-          <li class="ui-state-default">
-          <input name="label_<%= i %>" value="<%= options[i]%>" readonly />
+          <li>
+            <div class="ui-state-default"><%= options[i]%></div>
+            <input name="label_<%= i %>" value="<%= options[i]%>" type="hidden" readonly />
             <i class="fas fa-bars"></i>
-          </li>
         <% } %>
       </ul>
         <button type="submit">VOTE</button>

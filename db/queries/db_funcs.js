@@ -89,3 +89,10 @@ getCreatorIdByEmail(email)
    @return: promise with the newly creator_id
 */
 insertIntoCreators(creator)
+
+/** Given the poll ID increase the pollTotal by 1, returning total_votes max_votes
+ * @params pollID
+ * @return: {total_votes:10, max_votes:11}
+ */
+incrementTotalVotes(pollID)
+

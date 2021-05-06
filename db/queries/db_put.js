@@ -35,6 +35,7 @@ const sendPollToDatabase = function(poll) {
     "time_created",
     "time_closed",
     "time_to_death",
+    "max_votes"
   ];
   let queryString = makePutQuery("polls", properties, queryParams, true);
 
@@ -91,8 +92,6 @@ const putAllPollChoices = function(choice_names, poll_id) {
   });
 };
 
-//
-// @Alvin - are these the notes for a different function?
 /**takes a pollID and returns array of pollOptions and ratings
    @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1
    @return: true/false for inserted or not
@@ -107,7 +106,6 @@ const putPollRatings = function(poll_id, poll_ratings) {
       console.log("current_ratings: ", current_ratings)
     })
     .then(() => {
-
       // console.log("poll_ratings: ", poll_ratings)
       for (let row of current_ratings) {
         for (let poll of poll_ratings) {
@@ -123,14 +121,11 @@ const putPollRatings = function(poll_id, poll_ratings) {
 
         // console.log("poll_ratings[index]: ", poll_ratings[index])
         // console.log("index: ", index)
-
         ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
 
         ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
         db_client.query(queryString, [row.id])
-
       }
-
     })
     .catch((err) => {
       console.log("not quite right on db_put side", err);
@@ -204,6 +199,25 @@ const insertIntoCreators = function(creator) {
     );
 }
 
+/** Given the poll ID increase the pollTotal by 1, returning total_votes max_votes
+ * @params pollID
+ * @return: {total_votes:10, max_votes:11}
+ */
+const incrementTotalVotes = function(pollID) {
+  const queryString = `
+          UPDATE polls
+          SET total_votes =total_votes + 1
+          WHERE id = $1
+          RETURNING total_votes, max_votes
+        `;
+
+  // console.log("poll_ratings[index]: ", poll_ratings[index])
+  // console.log("index: ", index)
+  ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
+
+  ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
+  return db_client.query(queryString, [pollID]).then(res => { return res.rows[0]; });
+}
 // // do poll ratings for our dumb fat ex
 // const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
 
@@ -225,5 +239,6 @@ module.exports = {
   putAllPollChoices,
   put_new_poll,
   insertIntoCreators,
+  incrementTotalVotes
   // sendPollToDatabase
 };
