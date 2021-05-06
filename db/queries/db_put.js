@@ -94,9 +94,9 @@ const putAllPollChoices = function(choice_names, poll_id) {
   });
 };
 
-
-/**Puts poll ratings into the database after a vote
-   @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1   
+/**takes a pollID and returns array of pollOptions and ratings
+   @params:pollRatings:[{option1:10},{option2:20},{option3:145}], pollID: 1
+   @return: true/false for inserted or not
 */
 const putPollRatings = function(poll_id, poll_ratings) {
   let current_ratings = [];
@@ -108,7 +108,6 @@ const putPollRatings = function(poll_id, poll_ratings) {
       //console.log("current_ratings: ", current_ratings)
     })
     .then(() => {
-
       // console.log("poll_ratings: ", poll_ratings)
       for (let row of current_ratings) {
         for (let poll of poll_ratings) {
@@ -209,5 +208,6 @@ module.exports = {
   putAllPollChoices,
   put_new_poll,
   insertIntoCreators,
+  incrementTotalVotes
   // sendPollToDatabase
 };

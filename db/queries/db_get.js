@@ -45,7 +45,7 @@ const getCurrLinks = function() {
 */
 const getPollData = function(poll_id) {
   const queryString = makeGetQuery(
-    `creator_id, title, description, admin_link, survey_link, time_created, time_closed, time_to_death`,
+    `creator_id, title, description, admin_link, survey_link, time_created, time_closed, time_to_death, total_votes, max_votes`,
     "polls",
     `id = $1`
   );

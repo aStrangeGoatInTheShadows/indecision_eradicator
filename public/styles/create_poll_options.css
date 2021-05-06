@@ -48,7 +48,6 @@ body {
   color: #6d6d6d;
 }
 
-
 form {
   display: flex;
   flex-direction: column;
@@ -63,7 +62,16 @@ button {
 
   margin: 30px 0px; 
   background: #E26B6B;
+  box-shadow: 5px 5px 7px #0000009e;
   border-radius: 20px;
+}
+
+button:hover {
+  background: #AC4343;
+}
+
+button:active {
+  background: #E55959;
 }
 
 input {
@@ -78,7 +86,6 @@ input {
   margin: 10px 0; 
 }
 
-
 div.each-option {
   text-align: center;
   font-weight: 600;
@@ -86,6 +93,7 @@ div.each-option {
   color: #fff;
 
   background: #E48181;
+  box-shadow: 5px 5px 7px #0000009e;
   border-radius: 5px;
 
   width: 350px;
