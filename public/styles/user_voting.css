@@ -63,6 +63,7 @@ button {
   margin: 30px 0px; 
   background: #E26B6B;
   border-radius: 20px;
+  box-shadow: 5px 5px 7px #0000009e;
 }
 
 button:hover {
@@ -73,13 +74,19 @@ button:active {
   background: #E55959;
 }
 
-li.ui-state-default input {
+ul {
+  font-size: 0;
+}
+
+li div.ui-state-default {
+  font-size: 16px;
   text-align: center;
   font-weight: 600;
   color: #fff;
   line-height: 40px;
 
   background: #E48181;
+  box-shadow: 5px 5px 7px #0000009e;
   border-radius: 5px;
 
   width: 350px;
@@ -107,12 +114,17 @@ ul {
 
 a.fa-chevron-circle-left:link {
   text-decoration: none;
+  transform: scale(1.6);
+  left: 15px;
 }
 
 .fa-bars {
   color: #000;
   position: relative;
-  right: 30px;
+  left: 325px;
+  bottom: 30px;
+  font-size: 16px;
+  line-height: 0px;
 }
 
 .fa-bars:hover {

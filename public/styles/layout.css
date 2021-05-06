@@ -47,9 +47,10 @@ div.landing-container {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
-  max-width: 15em;
+  max-width: 290px;
 
   font-weight: bold;
+  font-size: 22px;
   line-height: 40px;
   text-shadow: 4px 4px black;
 }
@@ -60,6 +61,7 @@ button {
   padding: 8px 35px;
 
   background: #E26B6B;
+  box-shadow: 5px 5px 7px #0000009e;
   border-radius: 20px;
 }
 
@@ -73,6 +75,6 @@ button:active {
 
 .small-text {
   position: fixed;
-  right: 0px;
-  bottom: 0px;
+  right: 5px;
+  bottom: 5px;
 }
