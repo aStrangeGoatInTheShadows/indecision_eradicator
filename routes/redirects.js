@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const helpers = require('../lib/helpers');
-const { emailOnVote } = require('../lib/user_communication');
+const { emailOnVote, emailOnNewPoll } = require('../lib/user_communication');
 const dbGet = require('../db/queries/db_get');
 const dbPut = require('../db/queries/db_put');
 
@@ -105,21 +105,22 @@ module.exports = () => {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    // comms.emailOnNewPoll(req.session.pollID);
-    // comms.smsOnPollCompletion(req.session.pollID);
+    emailOnNewPoll(req.session.pollID);
     helpers.happyRedirect(res, req, "poll_created");
   });
 
   /* display page telling poll is created and the admin/survey links */
-  app.get("/poll_created", (req, res) => {
-    const templateVars = {
-      adminLink: req.session.adminLink,
-      surveyLink: req.session.surveyLink,
-    };
-
-    helpers.happyRender(res, req, "poll_created", templateVars);
+  app.get('/poll_created', (req, res) => {
+    dbGet.getPollData(req.session.pollID).then((myVal) => {
+      const title = myVal.title;
+      const templateVars = {
+        adminLink: req.session.adminLink,
+        surveyLink: req.session.surveyLink,
+        pollTitle: title
+      };
+      helpers.happyRender(res, req, 'poll_created', templateVars);
+    });
   });
-
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     // const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
@@ -180,21 +181,24 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/uservoting/", (req, res) => {
-    dbGet
-      .getPollChoices(req.session.pollID)
+    dbGet.getPollChoices(req.session.pollID)
       .then((result) => {
         const optionsArr = [];
         for (const option of result) {
           optionsArr.push(option.name);
         }
-        const templateVars = {
-          userid: req.params.id,
-          options: optionsArr,
-          numPolls: optionsArr.length,
-        };
-        helpers.happyRender(res, req, "user_voting", templateVars);
-      })
-      .catch((error) => {
+        dbGet.getPollData(req.session.pollID).then((result2) => {
+          console.log("result2", result2);
+          const templateVars = {
+            userid: req.params.id,
+            options: optionsArr,
+            numPolls: optionsArr.length,
+            pollDescription: result2.description,
+            title: result2.title
+          };
+          helpers.happyRender(res, req, "user_voting", templateVars);
+        });
+      }).catch((error) => {
         res.render("error", {
           errCode: "Unable to get Poll Choices",
           errMsg: error,
@@ -234,6 +238,8 @@ module.exports = () => {
 
       if (req.session.total_votes === req.session.max_votes) {
         templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} has been cast vote is now closing`;
+        dbPut.incrementTotalVotes(req.session.pollID).then(result => console.log(result));
+        req.session.total_votes++;
       } else {
         templateVars.header = "Sorry, this vote has been closed.";
       }

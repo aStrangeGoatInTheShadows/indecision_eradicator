@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" type="text/css" 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" type="text/css"
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
     <link rel="stylesheet" href="/styles/user_voting.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
@@ -19,10 +19,10 @@
   </head>
   <body>
     <a href="/poll/<%= userid %>" class="fas fa-chevron-circle-left"></a>
-    <h1 id="title">USER VOTING</h1>
+    <h1 id="title"><%= title %> - USER VOTING</h1>
 
     <div class="container">
-      <span class="instructions">Poll description here</span>
+      <span class="instructions"><%= pollDescription %></span>
       <span class="small-instructions">click and drag to reorder your preferences (top most preferred)</span>
       <form action="./" method="post">
         <ul id="sortable">
@@ -37,5 +37,5 @@
       </form>
     </div>
   </body>
-  
+
 </html>
