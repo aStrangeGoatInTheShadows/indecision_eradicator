@@ -1,7 +1,7 @@
 const cookieSession = require("cookie-session");
 const express = require("express");
 const helpers = require("../lib/helpers");
-// const comms = require('../lib/user_communication');
+const { emailOnVote } = require('../lib/user_communication');
 const dbGet = require("../db/queries/db_get");
 const dbPut = require("../db/queries/db_put");
 
@@ -135,7 +135,7 @@ module.exports = () => {
         dbGet
           .getPollRatings(pollID)
           .then((result) => {
-            console.log(result);
+            // console.log(result);
             const optionsArr = [];
             for (const option of result) {
               optionsArr.push(option.name);
@@ -209,18 +209,20 @@ module.exports = () => {
     const poll_ratings = [];
 
     /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
-    // console.log(req.body);
+    
     let ranking = Object.keys(req.body).length;
-    // console.log("number of options", ranking);
+    
     for (const key in req.body) {
       const option = req.body[key];
       poll_ratings.push({ name: option, rank: ranking });
-      console.log("poll_ratings: ", poll_ratings);
+      // console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
-    // .then(()=>{console.log('our promise was returned successfully')});
+    
+    emailOnVote(req.session.pollID)
+
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
