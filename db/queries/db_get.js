@@ -125,20 +125,21 @@ const getCreatorIdByEmail = function(email) {
 }
 // getAllPhoneNumbersForPoll(4)
 
-// const makeGetQuery = function (selection, table, where) {
-//   let queryString = `SELECT ${selection}
-//   FROM ${table}
-//   `;
+const getPollClosed = function(poll_id) {
+  return db_client.query(`
+    SELECT total_votes, max_votes, time_to_death
+    FROM polls
+    WHERE id = $1
+  `, [poll_id]);
+}
 
-//   if (where) {
-//     queryString += `WHERE ${where}
-//     `;
-//   }
-
-//   return queryString;
-// };
-
-// getPollRatings(8);
+const getCreatorById = function (id) {
+  return db_client.query(`
+  SELECT *
+  FROM creator
+  WHERE id = $1
+`, [id]);
+}
 
 module.exports = {
   getPollRatings,

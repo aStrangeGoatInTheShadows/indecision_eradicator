@@ -13,7 +13,8 @@ const morgan     = require('morgan');
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
+// morgan disabled for matt
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));

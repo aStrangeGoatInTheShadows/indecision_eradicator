@@ -10,7 +10,9 @@ CREATE TABLE polls (
   survey_link VARCHAR(255) NOT NULL,  -- access for the serfs
   time_created TIMESTAMP NOT NULL,  
   time_closed TIMESTAMP  DEFAULT NULL, -- Null if survey open (FALSE BOOLEAN IF NO TIME)
-  time_to_death TIMESTAMP DEFAULT NULL -- By default our surveys should never die because they are unicorn thunder
+  time_to_death TIMESTAMP DEFAULT NULL, -- By default our surveys should never die because they are unicorn thunder
+  total_votes INTEGER DEFAULT 0,
+  max_votes INTEGER DEFAULT 1000
 );
 
 -- the choices available for all polls - ideally used linked to the poll we want
