@@ -1,9 +1,9 @@
-const cookieSession = require('cookie-session');
-const express = require('express');
-const helpers = require('../lib/helpers');
+const cookieSession = require("cookie-session");
+const express = require("express");
+const helpers = require("../lib/helpers");
 // const comms = require('../lib/user_communication');
-const dbGet = require('../db/queries/db_get');
-const dbPut = require('../db/queries/db_put');
+const dbGet = require("../db/queries/db_get");
+const dbPut = require("../db/queries/db_put");
 
 const app = express();
 app.use(
@@ -50,39 +50,45 @@ module.exports = () => {
       time_to_death: null, //countdown to poll //stretch
     };
     if (!req.body.poll_title || !req.body.creator_email) {
-      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
-    }
-    else {
+      helpers.errorRedirect(
+        res,
+        req,
+        403,
+        "Required Field is missing please make sure title and email are filled",
+        "create_poll"
+      );
+    } else {
       req.session.numPolls = req.body.poll_num_of_options;
       req.session.adminLink = newLink + "/admin";
       req.session.surveyLink = newLink;
 
-      dbGet.getCreatorIdByEmail(req.body.creator_email).then(get_creator_id => {
-        // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
-        if (get_creator_id) {
-          newPoll.creator_id = get_creator_id;
-          dbPut.put_new_poll(newPoll).then((result) => {
-            req.session.pollID = result;
-            helpers.happyRedirect(res, req, "create_poll_options");
-          });
-        }
-        else {
-          const newCreator = {
-            email: req.body.creator_email,
-            user_name: req.body.creator_email,
-            password: "password",
-            phone_number: null
-          }
-          dbPut.insertIntoCreators(newCreator).then(new_create_id => {
-            // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
-            newPoll.creator_id = new_create_id;
+      dbGet
+        .getCreatorIdByEmail(req.body.creator_email)
+        .then((get_creator_id) => {
+          // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
+          if (get_creator_id) {
+            newPoll.creator_id = get_creator_id;
             dbPut.put_new_poll(newPoll).then((result) => {
               req.session.pollID = result;
               helpers.happyRedirect(res, req, "create_poll_options");
             });
-          })
-        }
-      })
+          } else {
+            const newCreator = {
+              email: req.body.creator_email,
+              user_name: req.body.creator_email,
+              password: "password",
+              phone_number: null,
+            };
+            dbPut.insertIntoCreators(newCreator).then((new_create_id) => {
+              // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
+              newPoll.creator_id = new_create_id;
+              dbPut.put_new_poll(newPoll).then((result) => {
+                req.session.pollID = result;
+                helpers.happyRedirect(res, req, "create_poll_options");
+              });
+            });
+          }
+        });
     }
   });
   /* gets page to input poll options */
@@ -121,7 +127,7 @@ module.exports = () => {
 
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
     dbGet
       .getPollIdByAdminLink(adminLink)
       .then((linkRes) => {
@@ -156,7 +162,7 @@ module.exports = () => {
   });
 
   app.get("/poll/:id/", (req, res) => {
-    const adminLink = `http://localhost:8080/poll/${req.params.id}/admin`;
+    const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
     dbGet
       .getPollIdByAdminLink(adminLink)
       .then((linkRes) => {
@@ -212,13 +218,6 @@ module.exports = () => {
       console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-
-    //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
-    /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
-
-    /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     // .then(()=>{console.log('our promise was returned successfully')});
@@ -229,7 +228,7 @@ module.exports = () => {
     helpers.happyRender(res, req, "vote_submitted", {});
   });
 
-  app.use(function(req, res, next) {
+  app.use(function (req, res, next) {
     helpers.happyRender(res, req, "error", {
       errCode: 404,
       errMsg: " The requested url does not exist",
