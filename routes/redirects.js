@@ -1,9 +1,9 @@
-const cookieSession = require('cookie-session');
-const express = require('express');
-const helpers = require('../lib/helpers');
-const { emailOnVote } = require('../lib/user_communication');
-const dbGet = require('../db/queries/db_get');
-const dbPut = require('../db/queries/db_put');
+const cookieSession = require("cookie-session");
+const express = require("express");
+const helpers = require("../lib/helpers");
+const { emailOnVote, emailOnNewPoll } = require('../lib/user_communication');
+const dbGet = require("../db/queries/db_get");
+const dbPut = require("../db/queries/db_put");
 
 const app = express();
 app.use(
@@ -51,39 +51,45 @@ module.exports = () => {
       max_votes: req.body.max_voters
     };
     if (!req.body.poll_title || !req.body.creator_email) {
-      helpers.errorRedirect(res, req, 403, "Required Field is missing please make sure title and email are filled", "create_poll");
-    }
-    else {
+      helpers.errorRedirect(
+        res,
+        req,
+        403,
+        "Required Field is missing please make sure title and email are filled",
+        "create_poll"
+      );
+    } else {
       req.session.numPolls = req.body.poll_num_of_options;
       req.session.adminLink = newLink + "/admin";
       req.session.surveyLink = newLink;
 
-      dbGet.getCreatorIdByEmail(req.body.creator_email).then(get_creator_id => {
-        // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
-        if (get_creator_id) {
-          newPoll.creator_id = get_creator_id;
-          dbPut.put_new_poll(newPoll).then((result) => {
-            req.session.pollID = result;
-            helpers.happyRedirect(res, req, "create_poll_options");
-          });
-        }
-        else {
-          const newCreator = {
-            email: req.body.creator_email,
-            user_name: req.body.creator_email,
-            password: "password",
-            phone_number: null
-          }
-          dbPut.insertIntoCreators(newCreator).then(new_create_id => {
-            // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
-            newPoll.creator_id = new_create_id;
+      dbGet
+        .getCreatorIdByEmail(req.body.creator_email)
+        .then((get_creator_id) => {
+          // console.log("get_creator_id: ",get_creator_id) //TESTING LINE ONLY
+          if (get_creator_id) {
+            newPoll.creator_id = get_creator_id;
             dbPut.put_new_poll(newPoll).then((result) => {
               req.session.pollID = result;
               helpers.happyRedirect(res, req, "create_poll_options");
             });
-          })
-        }
-      })
+          } else {
+            const newCreator = {
+              email: req.body.creator_email,
+              user_name: req.body.creator_email,
+              password: "password",
+              phone_number: null,
+            };
+            dbPut.insertIntoCreators(newCreator).then((new_create_id) => {
+              // console.log("new_create_id: ",new_create_id) //TESTING LINE ONLY
+              newPoll.creator_id = new_create_id;
+              dbPut.put_new_poll(newPoll).then((result) => {
+                req.session.pollID = result;
+                helpers.happyRedirect(res, req, "create_poll_options");
+              });
+            });
+          }
+        });
     }
   });
   /* gets page to input poll options */
@@ -99,14 +105,16 @@ module.exports = () => {
   });
 
   /* gets new poll options and inserts to db, redirects to poll created */
+  // @Matt emailOnNewPoll sends the poll creator the links
   app.post("/create_poll_options", (req, res) => {
     const pollOptions = [];
     for (const item in req.body) {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    // comms.emailOnNewPoll(req.session.pollID);
-    // comms.smsOnPollCompletion(req.session.pollID);
+
+    emailOnNewPoll(req.session.pollID);
+    
     helpers.happyRedirect(res, req, "poll_created");
   });
 
@@ -123,19 +131,32 @@ module.exports = () => {
   /* Allows user see current ranking.*/
   app.get("/poll/:id/admin/", (req, res) => {
     const adminLink = `http://www.pactweet.com/poll/${req.params.id}/admin`;
-    dbGet.getPollIdByAdminLink(adminLink).then((linkRes) => {
-      const pollID = linkRes.id;
-      dbGet.getPollRatings(pollID).then((result) => {
-        const optionsArr = [];
-        for (const option of result) {
-          optionsArr.push(option.name);
-        }
-        const templateVars = {
-          options: optionsArr,
-          numPolls: optionsArr.length,
-        };
-        helpers.happyRender(res, req, "admin_view", templateVars);
-      }).catch((error) => {
+    dbGet
+      .getPollIdByAdminLink(adminLink)
+      .then((linkRes) => {
+        const pollID = linkRes.id;
+        dbGet
+          .getPollRatings(pollID)
+          .then((result) => {
+            // console.log(result);
+            const optionsArr = [];
+            for (const option of result) {
+              optionsArr.push(option.name);
+            }
+            const templateVars = {
+              options: optionsArr,
+              numPolls: optionsArr.length,
+            };
+            helpers.happyRender(res, req, "admin_view", templateVars);
+          })
+          .catch((error) => {
+            res.render("error", {
+              errCode: "Unable to get pollRatings: ",
+              errMsg: error,
+            });
+          });
+      })
+      .catch((error) => {
         res.render("error", {
           errCode: "Unable to get pollRatings: ",
           errMsg: error,
@@ -204,25 +225,21 @@ module.exports = () => {
     const poll_ratings = [];
 
     /* NEED TO TEST THAT THIS RETRIEVES IN CORRECT ORDER */
-    // console.log(req.body);
+    
     let ranking = Object.keys(req.body).length;
-    // console.log("number of options", ranking);
+    
     for (const key in req.body) {
       const option = req.body[key];
       poll_ratings.push({ name: option, rank: ranking });
-      console.log("poll_ratings: ", poll_ratings);
+      // console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
 
+    dbPut.putPollRatings(req.session.pollID, poll_ratings);
+    
     emailOnVote(req.session.pollID);
 
-    dbPut.incrementTotalVotes(req.session.pollID).then(result => {
-      req.session.isClosed = false;
-      req.session.total_votes = result.total_votes;
-      req.session.max_votes = result.max_votes;
-      dbPut.putPollRatings(req.session.pollID, poll_ratings);
-      helpers.happyRedirect(res, req, `/vote_submitted/`)
-    });;
+    helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
   app.get("/vote_submitted/", (req, res) => {
@@ -236,11 +253,17 @@ module.exports = () => {
       templateVars.title = "POLL CLOSED";
       templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} users have submitted the poll...`;
       templateVars.text = "An email will be sent to the creator once the poll is completed"; //replace to the creator with creator name
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// SEND ONE EMAIL
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////// EVER TIME OPENS AFTER COMPLETE WILL GET EMAIL WATCH FOR ROUTING
+
+
     }
     helpers.happyRender(res, req, "vote_submitted", templateVars);
   });
 
-  app.use(function(req, res, next) {
+  app.use(function (req, res, next) {
     helpers.happyRender(res, req, "error", {
       errCode: 404,
       errMsg: " The requested url does not exist",
