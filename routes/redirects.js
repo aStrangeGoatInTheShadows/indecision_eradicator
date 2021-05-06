@@ -1,7 +1,7 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const helpers = require('../lib/helpers');
-// const comms = require('../lib/user_communication');
+const { emailOnVote } = require('../lib/user_communication');
 const dbGet = require('../db/queries/db_get');
 const dbPut = require('../db/queries/db_put');
 
@@ -212,16 +212,11 @@ module.exports = () => {
       console.log("poll_ratings: ", poll_ratings);
       ranking--;
     }
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
-    ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED     ////////////////////////////////////// MATT CHECKING WHY THIS IS UNDEFINED
 
-    //////////////////////////////////////////////// PUT POLL RATINGS DOES NOT RETURN A PROMISE, IT CAN'T BE CAUGHT
-    /////////////////////////////////////////////// IT RETURNS true or false upon success, but it will not come back immediately because its async. This needs to be redesigned.
-
-    /////////////////////////// POLL RATINGS ARE GETTING ADDED AFTER CHANGING TO RETURN TO PROMISE BUT PATH IS NOW BROKEN, NEED TO MAKE SURE GOING IN CORRECTLY
+    emailOnVote(req.session.pollID);
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
-    // .then(()=>{console.log('our promise was returned successfully')});
+
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
 
