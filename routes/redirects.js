@@ -190,7 +190,21 @@ module.exports = () => {
   });
 
   app.post("/poll/:id/", (req, res) => {
-    helpers.happyRedirect(res, req, `/poll/${req.params.id}/uservoting/`);
+
+    dbGet.getPollClosed(req.session.pollID)
+      .then((res)=> res.rows)
+      .catch((err)=> console.log(`error attempting to check if poll closed`, err))
+      .then ((isClosed)=>{
+        // console.log(isClosed);
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////// BLOCKS PATH IF VOTING CLOSED
+
+        // if(isClosed.total_votes < isClosed.max_votes) {
+          helpers.happyRedirect(res, req, `/poll/${req.params.id}/uservoting/`);
+          // return;
+        // }
+      })    
   });
 
   app.get("/poll/:id/uservoting/", (req, res) => {
@@ -238,7 +252,30 @@ module.exports = () => {
   });
 
   app.get("/vote_submitted/", (req, res) => {
-    helpers.happyRender(res, req, "vote_submitted", {});
+    let templateVars = {};
+
+    dbGet.getPollClosed(req.session.pollID)
+    .then((res)=> res.rows[0])
+    .catch((err)=> console.log(`error attempting to check if poll closed`, err))
+    .then ((isClosed)=>{
+      console.log(` app.get("/vote_submitted/", (req, res) => {` , isClosed)
+
+      console.log(`isClosed.total_votes >= isClosed.max_votes RESULTS `,isClosed.total_votes >= isClosed.max_votes)
+
+      if(isClosed.total_votes >= isClosed.max_votes) {
+        console.log('this ran');
+        templateVars.title = "POLL CLOSED";
+        templateVars.header = "Sorry, this vote has been closed.";
+        templateVars.text = "An email with the results has been sent to the Creator"; //replace to the creator with creator name          
+      }
+      else {
+        templateVars.title = "POLL CLOSED";
+        templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} users have submitted the poll...`;
+        templateVars.text = "An email will be sent to the creator once the poll is completed"; //replace to the creator with creator name
+      }
+    })
+
+    helpers.happyRender(res, req, "vote_submitted", templateVars);
   });
 
   app.use(function (req, res, next) {

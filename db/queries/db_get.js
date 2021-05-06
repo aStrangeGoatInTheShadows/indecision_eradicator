@@ -151,5 +151,6 @@ module.exports = {
   getPollIdByAdminLink,
   getAllPhoneNumbersForPoll,
   getCreatorIdByEmail,
-  getCreatorById
+  getCreatorById,
+  getPollClosed
 };
