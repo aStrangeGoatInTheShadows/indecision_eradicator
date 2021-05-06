@@ -24,6 +24,8 @@ const sendPollToDatabase = function(poll) {
     queryParams.push(poll[key]);
   }
 
+  console.log(`sendPollToDatabase here is your poll`, poll)
+
   const properties = [
     "creator_id",
     "title",
@@ -33,6 +35,7 @@ const sendPollToDatabase = function(poll) {
     "time_created",
     "time_closed",
     "time_to_death",
+    "max_votes"
   ];
   let queryString = makePutQuery("polls", properties, queryParams, true);
 
@@ -120,13 +123,6 @@ const putPollRatings = function(poll_id, poll_ratings) {
           SET rating = ${row.rating}
           WHERE id = $1
         `;
-
-        // console.log("poll_ratings[index]: ", poll_ratings[index])
-        // console.log("index: ", index)
-
-        ///////////////////////////// MAtt is WORKING HERE TO RETURN A PROMISE CORRECTLY OR FIX ASYNC ISSUES
-
-        ///// RETURN THE FUNCTION CALL. DO EXECUTION WHEN IT COMES BACK.
         db_client.query(queryString, [row.id])
 
       }
@@ -203,22 +199,6 @@ const insertIntoCreators = function(creator) {
       )
     );
 }
-
-// // do poll ratings for our dumb fat ex
-// const arr_of_ratings = [10, 5, 2, 4, 3, 7, 8, 9, 1, 6];
-
-// putPollRatings(8, arr_of_ratings);
-
-// choice_names = [
-//   "feet",
-//   "leg",
-//   "ass",
-//   "grass",
-//   "gas",
-//   "french onion",
-//   "worse survey ever",
-// ];
-// putAllPollChoices(choice_names, 2);
 
 module.exports = {
   putPollRatings,

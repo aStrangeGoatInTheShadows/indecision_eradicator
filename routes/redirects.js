@@ -39,6 +39,12 @@ module.exports = () => {
    */
   app.post("/create_poll", (req, res) => {
     const newLink = helpers.generateLink();
+
+    // console.log("this app.post/create_poll");
+    // console.log('this is your body', req.body)
+    //////////////////////////////////////////////////////////////////////// MAT WORKING HERE MAX VOTERS
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     const newPoll = {
       creator_id: null,
       title: req.body.poll_title,
@@ -48,6 +54,7 @@ module.exports = () => {
       time_created: new Date().toISOString(),
       time_closed: null, //time of vote completion(using as bool) //stretch
       time_to_death: null, //countdown to poll //stretch
+      max_votes: req.body.max_voters
     };
     if (!req.body.poll_title || !req.body.creator_email) {
       helpers.errorRedirect(
