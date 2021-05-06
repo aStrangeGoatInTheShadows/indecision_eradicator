@@ -237,11 +237,11 @@ module.exports = () => {
       templateVars.title = "POLL CLOSED";
 
       if (req.session.total_votes === req.session.max_votes) {
-        templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} has been cast vote is now closing`;
+        templateVars.header = `${req.session.total_votes} of ${req.session.max_votes} has been cast, voting will close now`;
         dbPut.incrementTotalVotes(req.session.pollID).then(result => console.log(result));
         req.session.total_votes++;
       } else {
-        templateVars.header = "Sorry, this vote has been closed.";
+        templateVars.header = "Sorry, the voting for this poll has been closed.";
       }
 
       templateVars.text = "Check in with the creator for the results of the poll"; //replace to the creator with creator name
