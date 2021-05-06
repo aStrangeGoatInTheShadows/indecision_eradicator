@@ -1,7 +1,7 @@
 const cookieSession = require("cookie-session");
 const express = require("express");
 const helpers = require("../lib/helpers");
-const { emailOnVote } = require('../lib/user_communication');
+const { emailOnVote, emailOnNewPoll } = require('../lib/user_communication');
 const dbGet = require("../db/queries/db_get");
 const dbPut = require("../db/queries/db_put");
 
@@ -105,14 +105,16 @@ module.exports = () => {
   });
 
   /* gets new poll options and inserts to db, redirects to poll created */
+  // @Matt emailOnNewPoll sends the poll creator the links
   app.post("/create_poll_options", (req, res) => {
     const pollOptions = [];
     for (const item in req.body) {
       pollOptions.push(req.body[item]);
     }
     dbPut.putAllPollChoices(pollOptions, req.session.pollID);
-    // comms.emailOnNewPoll(req.session.pollID);
-    // comms.smsOnPollCompletion(req.session.pollID);
+
+    emailOnNewPoll(req.session.pollID);
+    
     helpers.happyRedirect(res, req, "poll_created");
   });
 
@@ -235,7 +237,7 @@ module.exports = () => {
 
     dbPut.putPollRatings(req.session.pollID, poll_ratings);
     
-    emailOnVote(req.session.pollID)
+    emailOnVote(req.session.pollID);
 
     helpers.happyRedirect(res, req, `/vote_submitted/`);
   });
