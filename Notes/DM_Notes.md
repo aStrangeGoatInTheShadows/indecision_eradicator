@@ -7,9 +7,6 @@ such as "hahaomgitsfridayandimindecisiveroflmaowtf"
 <!--  When a user goes to a poll, if they alread went, show them the pretty 
 NEED THIS MANY MORE VOTES or time.... and a unicorn farting rainbows (stretch)-->
 
-
-PRESENTATION THOUGHTS
-
 Watch some ted talks and apple announcements. Pick up the general vocal pattern and speach pace.
 Then throw in some unicorn thunder jam in there. I was thinking some jazz hands.
 
@@ -56,3 +53,6 @@ example?
   2   |bob@gmail.com        |  Board-game
   3   |sally@gmail.com      |  Color of dress
   4   |Grandma@gmail.com    |  Heavy Metal playlist
+
+
+
