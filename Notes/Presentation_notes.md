@@ -6,15 +6,17 @@
 
  ***David***: Our group decided to pick Option 4, the Decision Maker project. We decided upon this mainly through process of elimination. We narrowed it down to this decision maker , smart-to-do, and resource wall. Ultimately, since none of us could come to a decision, we thought, 'hey, if we had a decision maker, this would be easier!'.
 
- ***Alvin***: We started planning with Lucidcharts for our ERD and Figma for our design markup. **Show ERD and Figma pages** During implementation we found ourselves referring back to these 2 resources over and over again. Showing just how valuable planning really is.
+ ***Alvin***: During our planning phase we decided to use Lucidcharts for our ERD and Figma for our design markup and here's the fruits of our labour **Show ERD and Figma pages** 
+ During implementation phase we found ourselves referring back this over and over again.
 
  [Figma Link](https://www.figma.com/file/jDiTFxigBPke9LADpOzxW9/team-unicorn-thunder?node-id=0%3A1)
 
  [ERD Link](https://lucid.app/lucidchart/invitations/accept/inv_27bd99d1-6576-4328-b53e-453dee3ad853?viewport_loc=-257%2C-81%2C3012%2C1499%2C0_0)
 
-***Alvin***: For the backend of our project we used Express and JavaScript. And for the frontend we used ejs templates, CSS, and jQuery. For our database we used PostgreSQL, hosted on ElephantSQL. For emailing we used NodeMailer API. We also setup Twilio for SMS messaging, but did not fully test it yet.
+***Alvin***: Here's the stack and some of the technologies we used for the project
+https://docs.google.com/document/d/11Rrm7CQUH7VImj8jCjkL_ZtLQpZ0ERM9DmSxNS2W1Lo/edit
 
-We split the work up in a vertical fashion. Matt setup the DB and DB queries, as well as email and SMS integration, David handled frontend setup, and I setup the backend routing, logic for the project, and helped resolve git conflicts (git ninja!). Peer programing was consistently used throughout the project to troubleshoot errors.
+We split the work up in a vertical fashion. Matt setup the DB and the queries,as well as integration with email and sms, David handled the setup for the frontend, while I setup the backendof the project. We also wanted to shout out Peer programing as it was consistently used to troubleshoot errors.
 
  ***David***: Let's walk through the steps of creating a poll, voting, and viewing the results....
 
@@ -25,6 +27,7 @@ We split the work up in a vertical fashion. Matt setup the DB and DB queries, as
 
  For now we will just have 3 users voting on this poll, Alvin, Matt, and I. But this could be however many you want.
 
+(quepastah@gmail.com)
  **2. Click create poll options**
  Here we can set whatever we'd like for poll options. Since we're hungry, Let's put in some lunch options.
  How about Option 1: McDonald's, and Option 2: Dairy Queen. Sounds great.
@@ -52,6 +55,8 @@ That's as far as we got with the project so far. In the future we could add addi
 
 Thanks for listening!
 
+
+<!-- OPTIONAL -->
 **Extra**
 We also had a server setup with the project for anyone to view and use, but unfortunately there were some hardware issues and it crashed. Maybe in the future we will get that back up and running for you all to use!
 
