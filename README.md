@@ -28,7 +28,11 @@ As users submit their votes on the poll, the creator is informed via email that 
 - Max voters on polls option
 
 ## Screenshots
-[Voter Count](##img of 2/3 voters page)
+[Landing Page](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Landing%20Page.png)
+[Poll Options](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Create%20poll%20options.png)
+[Poll Created](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/poll%20created%20with%20links.png)
+[User Voting](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/user%20voting.png)
+[Voter Count](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/1%20of%203%20voters%20voted.png)
 
 ## Dependencies
 - "body-parser": "^1.19.0"
@@ -46,12 +50,12 @@ As users submit their votes on the poll, the creator is informed via email that 
 
 ## ERD
 https://lucid.app/lucidchart/invitations/accept/inv_27bd99d1-6576-4328-b53e-453dee3ad853?viewport_loc=-257%2C-81%2C3012%2C1499%2C0_0
-[ERD](##img of ERD)
+[ERD](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/ERD.png)
 
 
 ## Design
 https://www.figma.com/file/jDiTFxigBPke9LADpOzxW9/team-unicorn-thunder?node-id=0%3A1
-[Figma](##img of Figma)
+[Figma](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Figma.png)
 
 ## Resources
 - https://www.twilio.com/
