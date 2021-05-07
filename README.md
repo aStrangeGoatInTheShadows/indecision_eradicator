@@ -28,11 +28,20 @@ As users submit their votes on the poll, the creator is informed via email that 
 - Max voters on polls option
 
 ## Screenshots
-[Landing Page](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Landing%20Page.png)
-[Poll Options](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Create%20poll%20options.png)
-[Poll Created](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/poll%20created%20with%20links.png)
-[User Voting](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/user%20voting.png)
-[Voter Count](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/1%20of%203%20voters%20voted.png)
+### Landing Page
+![Landing Page](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Landing%20Page.png)
+
+### Poll Options
+![Poll Options](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Create%20poll%20options.png)
+
+### Poll Created
+![Poll Created](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/poll%20created%20with%20links.png)
+
+### User Voting
+![User Voting](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/user%20voting.png)
+
+### Voter Count
+![Voter Count](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/1%20of%203%20voters%20voted.png)
 
 ## Dependencies
 - "body-parser": "^1.19.0"
