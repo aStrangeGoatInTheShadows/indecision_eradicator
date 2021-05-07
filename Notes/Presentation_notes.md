@@ -4,7 +4,7 @@
 
 **Show main page**
 
- ***David***: Our group decided to pick Option 4, the Decision Maker project. We decided upon this mainly through process of elimination. We narrowed it down to this decision maker , smart-to-do, and resource wall. Ultimately, since none of us could come to a decision, we thought, 'hey, if we had a decision maker, this would be easier!'.
+ ***David***: Our group decided to pick Option 4, the Decision Maker project. Through process of elimination we narrowed it down to decision maker , smart-to-do, and resource wall. Ultimately, we couldn't come to a decision and through "damn, i wish we had a decision maker".
 
  ***Alvin***: During our planning phase we decided to use Lucidcharts for our ERD and Figma for our design markup and here's the fruits of our labour **Show ERD and Figma pages** 
  During implementation phase we found ourselves referring back this over and over again.

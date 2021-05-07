@@ -35,14 +35,14 @@ body {
 
 .instructions {
   margin: 0 0 40px;
-  
+
   font-weight: bold;
   color: black;
 }
 
 .small-instructions {
   margin: 0 0 20px;
-  
+
   font-weight: lighter;
   font-size: 12px;
   color: #6d6d6d;
@@ -60,7 +60,7 @@ button {
   color: #ffffff;
   padding: 8px 35px;
 
-  margin: 30px 0px; 
+  margin: 30px 0px;
   background: #E26B6B;
   border-radius: 20px;
   box-shadow: 5px 5px 7px #0000009e;
@@ -92,6 +92,7 @@ li div.ui-state-default {
   width: 350px;
   height: 40px;
   margin: 10px 0;
+  cursor: grab;
 }
 
 input:hover {
@@ -119,7 +120,8 @@ a.fa-chevron-circle-left:link {
 }
 
 .fa-bars {
-  color: #000;
+  /* color: #000; */
+  color:#B76565;
   position: relative;
   left: 325px;
   bottom: 30px;
