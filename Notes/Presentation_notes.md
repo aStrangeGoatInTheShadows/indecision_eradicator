@@ -12,9 +12,11 @@
 
  [ERD Link](https://lucid.app/lucidchart/invitations/accept/inv_27bd99d1-6576-4328-b53e-453dee3ad853?viewport_loc=-257%2C-81%2C3012%2C1499%2C0_0)
 
-**Alvin**: For the backend of our project we used Express and JavaScript. And for the frontend we used ejs templates, CSS, and jQuery. For our database we used PostgreSQL, hosted on ElephantSQL. For emailing we used NodeMailer API. We also setup Twilio for SMS messaging, but did not fully test it yet.
+***Alvin***: For the backend of our project we used Express and JavaScript. And for the frontend we used ejs templates, CSS, and jQuery. For our database we used PostgreSQL, hosted on ElephantSQL. For emailing we used NodeMailer API. We also setup Twilio for SMS messaging, but did not fully test it yet.
 
- **David**: Let's walk through the steps of creating a poll, voting, and viewing the results....
+We split the work up in a vertical fashion. Matt setup the DB and DB queries, as well as email and SMS integration, David handled frontend setup, and I setup the backend routing, logic for the project, and helped resolve git conflicts (git ninja!). Peer programing was consistently used throughout the project to troubleshoot errors.
+
+ ***David***: Let's walk through the steps of creating a poll, voting, and viewing the results....
 
  **1. Click create poll**
  Here are the fields for a user to create a poll. We've restricted the forms to require a Title and an email. 
@@ -52,3 +54,10 @@ Thanks for listening!
 
 **Extra**
 We also had a server setup with the project for anyone to view and use, but unfortunately there were some hardware issues and it crashed. Maybe in the future we will get that back up and running for you all to use!
+
+**Hardships**  
+- **Git conflicts / merges**
+- Syntax typos (missing single '.' in a string)
+- Overwriting variables inside promises
+- Hardware issues
+- Different active working schedules
