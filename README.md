@@ -58,13 +58,15 @@ As users submit their votes on the poll, the creator is informed via email that 
 - "twilio": "^3.61.0"
 
 ## ERD
-https://lucid.app/lucidchart/invitations/accept/inv_27bd99d1-6576-4328-b53e-453dee3ad853?viewport_loc=-257%2C-81%2C3012%2C1499%2C0_0
-[ERD](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/ERD.png)
+![ERD](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/ERD.png)
+> https://lucid.app/lucidchart/invitations/accept/inv_27bd99d1-6576-4328-b53e-453dee3ad853?viewport_loc=-257%2C-81%2C3012%2C1499%2C0_0
 
 
-## Design
-https://www.figma.com/file/jDiTFxigBPke9LADpOzxW9/team-unicorn-thunder?node-id=0%3A1
-[Figma](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Figma.png)
+
+## Design (Figma)
+![Figma](https://github.com/aStrangeGoatInTheShadows/indecision_eradicator/blob/master/Docs/Figma.png)
+> https://www.figma.com/file/jDiTFxigBPke9LADpOzxW9/team-unicorn-thunder?node-id=0%3A1
+
 
 ## Resources
 - https://www.twilio.com/
