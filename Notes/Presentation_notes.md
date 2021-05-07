@@ -27,7 +27,7 @@ We split the work up in a vertical fashion. Matt setup the DB and the queries,as
 
  For now we will just have 3 users voting on this poll, Alvin, Matt, and I. But this could be however many you want.
 
-(quepastah@gmail.com)
+(alvinoalvintest@gmail.com)
  **2. Click create poll options**
  Here we can set whatever we'd like for poll options. Since we're hungry, Let's put in some lunch options.
  How about Option 1: McDonald's, and Option 2: Dairy Queen. Sounds great.
